@@ -54,20 +54,11 @@ while running:
             running = False
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
-                f = -5000
+                f = -25
             if event.key == pygame.K_RIGHT:
-                f = 5000
+                f = 25
     
     ## Simulation ##
-    # Pendulum
-    theta_dd = -g/l * np.sin(theta_prev) - 2*theta_d_prev
-    theta_d = theta_d_prev + theta_dd * dt
-    theta = theta_prev + theta_d * dt
-
-    theta_dd_prev = theta_dd
-    theta_d_prev = theta_d
-    theta_prev = theta
-
     # Rectangle
     x_dd = f - kw * x_d_prev
     x_d = x_d_prev + x_dd_prev * dt
@@ -77,11 +68,32 @@ while running:
     x_d_prev = x_d
     x_prev = x
 
+    print(x)
+
+    # Pendulum
+    term1 = -x_dd * np.cos(theta_prev)
+    term2 = x_d * np.sin(theta_prev)
+    term3 = -x_d * theta_d_prev * np.sin(theta_prev)
+    term4 = g * np.sin(theta_prev)
+    term5 = 0.5 * theta_d_prev
+    numerator = term1 + term2 + term3 + term4 + term5
+    denominator = -l
+
+    theta_dd = numerator/denominator
+    theta_d = theta_d_prev + theta_dd * dt
+    theta = theta_prev + theta_d * dt
+
+    theta_dd_prev = theta_dd
+    theta_d_prev = theta_d
+    theta_prev = theta
+
     f = 0
     ## Rendering ## 
     screen.fill(WHITE)
 
-    rect = pygame.Rect((coordinates[0]-rect_w/2+x, coordinates[1]-rect_h/2), 
+    rect_x = coordinates[0]-rect_w/2+(x*1000)
+    rect_y = coordinates[1]-rect_h/2
+    rect = pygame.Rect((rect_x, rect_y), 
                        (rect_w, rect_h))
     pygame.draw.rect(screen, BLUE, rect)
     line.polarr((rect.center), theta, l*1000, RED)
