@@ -23,7 +23,7 @@ for i in range(1, N):
     theta_d[i] = theta_d[i-1] + theta_dd[i] * dt
     theta[i] = theta[i-1] + theta_d[i] * dt
 
-plt.plot(theta)
+plt.plot(time, theta)
 plt.show()
 
 
