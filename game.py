@@ -1,6 +1,11 @@
+# libraries
 import pygame
-import drawline
 import numpy as np
+
+# modules
+import drawline
+import physics
+import controller
 
 pygame.init()
 
@@ -17,34 +22,44 @@ screen = pygame.display.set_mode([WIDTH, HEIGHT])
 clock = pygame.time.Clock()
 line = drawline.Line(screen)
 
+## Physics ##
+cart = physics.PhysicsCart()
+pendulum = physics.PhysicsCartPendulum(cart)
+ctrl_angle = controller.Control()
+ctrl_pos = controller.Control()
+
 ## Sim variables ##
-theta = 3.14
-theta_d = 0
-theta_dd = 0
+# I/O
+pendulum.theta = 3.
+theta = pendulum.theta
+cart.x = 0
+f = 0
 
-theta_prev = theta
-theta_d_prev = 0
-theta_dd_prev = 0
-
+# Time
 dt = 0
-g = 9.81
-l = 0.2
 
-offset = 0
+# Properties
+pendulum.l = 0.1
+cart.m = 1
+cart.cf = 2
+
+cart.set_limit(0.3)
+
+# Space
 coordinates = list(MIDDLE)
 
+# PID
+ctrl_angle.kp = 100
+ctrl_angle.ki = 1200
+ctrl_angle.kd = 0.45
+
+ctrl_pos.kp = 30
+ctrl_pos.ki = 25
+ctrl_pos.kd = 1
+
+## Rendering variables ##
 rect_w = 50
 rect_h = 25
-
-x = 0
-x_d = 0
-x_dd = 0
-x_prev = 0
-x_d_prev = 0
-x_dd_prev = 0
-f = 0
-m = 1
-kw = 2
 
 running = True
 while running:
@@ -54,40 +69,19 @@ while running:
             running = False
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
-                f = -25
+                f = -50
             if event.key == pygame.K_RIGHT:
-                f = 25
+                f = 50
     
     ## Simulation ##
-    # Rectangle
-    x_dd = f - kw * x_d_prev
-    x_d = x_d_prev + x_dd_prev * dt
-    x = x_prev + x_d_prev * dt
-
-    x_dd_prev = x_dd
-    x_d_prev = x_d
-    x_prev = x
-
-    print(x)
-
-    # Pendulum
-    term1 = -x_dd * np.cos(theta_prev)
-    term2 = x_d * np.sin(theta_prev)
-    term3 = -x_d * theta_d_prev * np.sin(theta_prev)
-    term4 = g * np.sin(theta_prev)
-    term5 = 0.5 * theta_d_prev
-    numerator = term1 + term2 + term3 + term4 + term5
-    denominator = -l
-
-    theta_dd = numerator/denominator
-    theta_d = theta_d_prev + theta_dd * dt
-    theta = theta_prev + theta_d * dt
-
-    theta_dd_prev = theta_dd
-    theta_d_prev = theta_d
-    theta_prev = theta
-
+    # f = -ctrl_angle.control(theta, 3.14, dt) 
+    f = ctrl_pos.control(cart.x, 0, dt) - ctrl_angle.control(theta, 3.14, dt) 
+    cart.f = f
+    x = cart.step(dt)
+    theta = pendulum.step(dt)
     f = 0
+
+    ctrl_angle.print()
     ## Rendering ## 
     screen.fill(WHITE)
 
@@ -96,11 +90,11 @@ while running:
     rect = pygame.Rect((rect_x, rect_y), 
                        (rect_w, rect_h))
     pygame.draw.rect(screen, BLUE, rect)
-    line.polarr((rect.center), theta, l*1000, RED)
+    line.polarr((rect.center), theta, pendulum.l*1000, RED)
 
     # Simular to update, but faster?
     pygame.display.flip()
 
-    dt = clock.tick(60)/1000
+    dt = clock.tick(120)/1000
 
 pygame.quit()
