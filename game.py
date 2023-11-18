@@ -30,32 +30,33 @@ ctrl_pos = controller.Control()
 
 ## Sim variables ##
 # I/O
-pendulum.theta = 3.
+pendulum.theta = 3.05
 theta = pendulum.theta
-cart.x = 0
+cart.x = 0.1
 f = 0
 
 # Time
 dt = 0
 
 # Properties
-pendulum.l = 0.1
-cart.m = 1
-cart.cf = 2
+pendulum.l = 0.2
+pendulum.cf = 1
+cart.m = 0.5
+cart.cf = 5
 
-cart.set_limit(0.3)
+cart.set_limit(0.35)
 
 # Space
 coordinates = list(MIDDLE)
 
 # PID
-ctrl_angle.kp = 100
-ctrl_angle.ki = 1200
-ctrl_angle.kd = 0.45
+ctrl_angle.kp = 150
+ctrl_angle.ki = 4
+ctrl_angle.kd = 2
 
-ctrl_pos.kp = 30
-ctrl_pos.ki = 25
-ctrl_pos.kd = 1
+ctrl_pos.kp = 20
+ctrl_pos.ki = 0
+ctrl_pos.kd = 0
 
 ## Rendering variables ##
 rect_w = 50
@@ -74,8 +75,8 @@ while running:
                 f = 50
     
     ## Simulation ##
-    # f = -ctrl_angle.control(theta, 3.14, dt) 
-    f = ctrl_pos.control(cart.x, 0, dt) - ctrl_angle.control(theta, 3.14, dt) 
+    f = -ctrl_angle.control(theta, 3.14, dt) + ctrl_pos.control(cart.x, 0, dt)
+    # ctrl_pos.control(cart.x, 0, dt) -
     cart.f = f
     x = cart.step(dt)
     theta = pendulum.step(dt)

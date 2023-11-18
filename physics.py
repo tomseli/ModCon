@@ -55,8 +55,8 @@ class PhysicsCartPendulum(PhysicsBase):
         
         # Properties
         self.g = 9.81
-        self.l = 0.1
-        self.cf = 0.5 # temporary
+        self.l = 0
+        self.cf = 0 # temporary
         
         # Motion
         self.theta = 0
