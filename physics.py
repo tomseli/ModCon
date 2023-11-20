@@ -65,7 +65,7 @@ class PhysicsCartPendulum(PhysicsBase):
         self.g = 9.81
         self.l = 0
         self.m = 0
-        self.cf = 0 # temporary
+        self.cf = 0 # temporary approx. to dampening
         
         # Motion
         self.theta = 0
@@ -77,7 +77,7 @@ class PhysicsCartPendulum(PhysicsBase):
         term2 = self.cart.x_d * np.sin(self.theta)
         term3 = -self.cart.x_d * self.theta_d * np.sin(self.theta)
         term4 = self.g * np.sin(self.theta)
-        term5 = self.cf * self.theta_d # temporary
+        term5 = self.cf * self.theta_d # temporary approx. to dampening
         numerator = term1 + term2 + term3 + term4 + term5
 
         self.theta_dd = numerator/-self.l
