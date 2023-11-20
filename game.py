@@ -30,19 +30,19 @@ ctrl_pos = controller.Control()
 
 ## Sim variables ##
 # I/O
-pendulum.theta = 3.05
+pendulum.theta = 3.14
 theta = pendulum.theta
-cart.x = 0.1
+cart.x = 0.0
 f = 0
 
 # Time
 dt = 0
 
 # Properties
-pendulum.l = 0.2
+pendulum.l = 0.1
 pendulum.cf = 1
 cart.m = 0.5
-cart.cf = 5
+cart.cf = 10
 
 cart.set_limit(0.35)
 
@@ -50,13 +50,16 @@ cart.set_limit(0.35)
 coordinates = list(MIDDLE)
 
 # PID
-ctrl_angle.kp = 150
-ctrl_angle.ki = 4
-ctrl_angle.kd = 2
+ctrl_angle.kp = 2.6
+ctrl_angle.ki = 10
+ctrl_angle.kd = 0.01
 
-ctrl_pos.kp = 20
+ctrl_pos.kp = 90
 ctrl_pos.ki = 0
 ctrl_pos.kd = 0
+
+ctrl_pos.enableLogging()
+ctrl_angle.enableLogging()
 
 ## Rendering variables ##
 rect_w = 50
@@ -73,16 +76,26 @@ while running:
                 f = -50
             if event.key == pygame.K_RIGHT:
                 f = 50
+    if(theta > 3.14 + 0.5 or theta < 3.14 - 0.5):
+        running = False
+        pass
     
     ## Simulation ##
-    f = -ctrl_angle.control(theta, 3.14, dt) + ctrl_pos.control(cart.x, 0, dt)
+    if((theta < 3.14 + 0.01) and (theta > 3.14 - 0.01)):
+    # if(0):
+        f = ctrl_pos.control(cart.x, 0, dt) - 100*ctrl_angle.control(theta, 3.14, dt)
+        print("State 1")
+    else:
+        f = 100*-ctrl_angle.control(theta, 3.14, dt)
+        ctrl_pos.control(cart.x, 0, dt)
+        print("State 2")
+
     # ctrl_pos.control(cart.x, 0, dt) -
     cart.f = f
     x = cart.step(dt)
     theta = pendulum.step(dt)
     f = 0
 
-    ctrl_angle.print()
     ## Rendering ## 
     screen.fill(WHITE)
 
@@ -97,5 +110,8 @@ while running:
     pygame.display.flip()
 
     dt = clock.tick(120)/1000
+
+ctrl_angle.plotLogs("Control angle", False)
+ctrl_pos.plotLogs("Control pos", True)
 
 pygame.quit()
