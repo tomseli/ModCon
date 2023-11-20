@@ -99,7 +99,9 @@ while running:
     
         sp_theta = controller1.control(cart.x, 0, dt)
         f = -controller2.control(pendulum.theta, sp_theta+3.14, dt) + disturb
-        disturb = 0
+    else:
+        f = 0
+    disturb = 0
 
     cart.f = f
     x = cart.step(dt)
