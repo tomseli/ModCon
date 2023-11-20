@@ -25,8 +25,9 @@ line = drawline.Line(screen)
 ## Physics ##
 cart = physics.PhysicsCart()
 pendulum = physics.PhysicsCartPendulum(cart)
-ctrl_angle = controller.Control()
-ctrl_pos = controller.Control()
+cart.addPendulum(pendulum)
+controller1 = controller.Control()
+controller2 = controller.Control()
 
 ## Sim variables ##
 # I/O
@@ -41,8 +42,9 @@ dt = 0
 # Properties
 pendulum.l = 0.1
 pendulum.cf = 1
-cart.m = 0.5
-cart.cf = 10
+pendulum.m = 0.01
+cart.m = 1
+cart.cf = 5
 
 cart.set_limit(0.35)
 
@@ -50,16 +52,16 @@ cart.set_limit(0.35)
 coordinates = list(MIDDLE)
 
 # PID
-ctrl_angle.kp = 2.6
-ctrl_angle.ki = 10
-ctrl_angle.kd = 0.01
+controller1.kp = 0.5
+controller1.ki = 0.1
+controller1.kd = 0
 
-ctrl_pos.kp = 90
-ctrl_pos.ki = 0
-ctrl_pos.kd = 0
+controller2.kp = 15
+controller2.ki = 0
+controller2.kd = 1.5
 
-ctrl_pos.enableLogging()
-ctrl_angle.enableLogging()
+controller1.enableLogging()
+controller2.enableLogging()
 
 ## Rendering variables ##
 rect_w = 50
@@ -76,25 +78,18 @@ while running:
                 f = -50
             if event.key == pygame.K_RIGHT:
                 f = 50
+    
     if(theta > 3.14 + 0.5 or theta < 3.14 - 0.5):
         running = False
-        pass
     
     ## Simulation ##
-    if((theta < 3.14 + 0.01) and (theta > 3.14 - 0.01)):
-    # if(0):
-        f = ctrl_pos.control(cart.x, 0, dt) - 100*ctrl_angle.control(theta, 3.14, dt)
-        print("State 1")
-    else:
-        f = 100*-ctrl_angle.control(theta, 3.14, dt)
-        ctrl_pos.control(cart.x, 0, dt)
-        print("State 2")
-
-    # ctrl_pos.control(cart.x, 0, dt) -
+    sp_theta = controller1.control(cart.x, 0, dt)
+    f = -controller2.control(pendulum.theta, sp_theta+3.14, dt)
+    
     cart.f = f
     x = cart.step(dt)
     theta = pendulum.step(dt)
-    f = 0
+
 
     ## Rendering ## 
     screen.fill(WHITE)
@@ -106,12 +101,12 @@ while running:
     pygame.draw.rect(screen, BLUE, rect)
     line.polarr((rect.center), theta, pendulum.l*1000, RED)
 
-    # Simular to update, but faster?
     pygame.display.flip()
 
+    # Time keeping
     dt = clock.tick(120)/1000
 
-ctrl_angle.plotLogs("Control angle", False)
-ctrl_pos.plotLogs("Control pos", True)
+controller2.plotLogs("Control 2", False)
+controller1.plotLogs("Control 1", True)
 
 pygame.quit()

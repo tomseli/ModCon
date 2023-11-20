@@ -26,9 +26,19 @@ class PhysicsCart(PhysicsBase):
         # Limits
         self.x_min = -sys.maxsize
         self.x_max = +sys.maxsize
+
+    def addPendulum(self, pendulum) -> None:
+        self.pendulum = pendulum
+        return None
     
     def step(self, dt : float) -> float:
-        self.x_dd = self.f - self.cf * self.x_d
+        term1 = -self.pendulum.m * self.pendulum.l \
+            * self.pendulum.theta_dd * np.cos(self.pendulum.theta)
+        term2 = self.pendulum.m * self.pendulum.l \
+            * self.pendulum.theta*np.sin(self.pendulum.theta)
+        
+        self.x_dd = (term1 + term2) / (self.pendulum.m + self.m) \
+            + self.f - self.x_d * self.cf
         self.x_d = self.x_d + self.x_dd * dt
         self.x = self.x + self.x_d * dt
 
@@ -56,6 +66,7 @@ class PhysicsCartPendulum(PhysicsBase):
         # Properties
         self.g = 9.81
         self.l = 0
+        self.m = 0
         self.cf = 0 # temporary
         
         # Motion
