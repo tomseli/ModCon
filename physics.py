@@ -56,8 +56,6 @@ class PhysicsCart(PhysicsBase):
         self.x_min = -x_offset
         self.x_max = x_offset
         
-        
-
 class PhysicsCartPendulum(PhysicsBase):
     def __init__(self, cart : PhysicsCart) -> None:
         # Input

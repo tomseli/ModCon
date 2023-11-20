@@ -52,12 +52,12 @@ cart.set_limit(0.35)
 coordinates = list(MIDDLE)
 
 # PID
-controller1.kp = 0.5
-controller1.ki = 0.1
-controller1.kd = 0
+controller1.kp = 1.0
+controller1.ki = 0.2
+controller1.kd = 0.6
 
-controller2.kp = 15
-controller2.ki = 0
+controller2.kp = 20
+controller2.ki = 0.5
 controller2.kd = 1.5
 
 controller1.enableLogging()
@@ -66,6 +66,7 @@ controller2.enableLogging()
 ## Rendering variables ##
 rect_w = 50
 rect_h = 25
+out = 0
 
 running = True
 while running:
@@ -75,17 +76,18 @@ while running:
             running = False
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
-                f = -50
+                out = -10
             if event.key == pygame.K_RIGHT:
-                f = 50
+                out = 10
     
     if(theta > 3.14 + 0.5 or theta < 3.14 - 0.5):
         running = False
     
     ## Simulation ##
     sp_theta = controller1.control(cart.x, 0, dt)
-    f = -controller2.control(pendulum.theta, sp_theta+3.14, dt)
-    
+    f = -controller2.control(pendulum.theta, sp_theta+3.14, dt) + out
+    out = 0
+
     cart.f = f
     x = cart.step(dt)
     theta = pendulum.step(dt)
