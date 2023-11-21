@@ -6,6 +6,7 @@ import numpy as np
 import drawline
 import physics
 import controller
+import lowpass
 
 ## Defines ##
 # Simulation defines
@@ -71,6 +72,9 @@ controller2.kp = 20
 controller2.ki = 0.5
 controller2.kd = 1.5
 
+controller2.addLPFilter(0.01)
+controller2.addLimit(5)
+
 controller1.enableLogging()
 controller2.enableLogging()
 
@@ -93,6 +97,7 @@ while running:
                 enable_control = False
     
     ## Simulation ##
+    # Controller
     if(enable_control):
         if(theta > 3.14 + 0.5 or theta < 3.14 - 0.5):
             running = False
