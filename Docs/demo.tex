@@ -41,11 +41,15 @@
         \dot y_s &= \ell  \dot \theta  sin(\theta)
     \end{align*}
 
-    Then, to derive the equations of motion, the Lagrangion will be used.
+    To derive the equations of motion, the Lagrangian (\ref{eq:lagrangian}) will be used.
     First, $T$, the kinetic energy of the system will be calculated.
 
+    \begin{equation} \label{eq:lagrangian}
+        \mathcal{L} = T - V
+    \end{equation}
+
     \begin{equation}
-        \begin{aligned}
+        \begin{aligned} \label{eq:kinetic}
             T &= \frac{1}{2}  M  \dot x^2 + \frac{1}{2}  m (\dot x_s^2 + \dot y_s^2) \\
             T &= \frac{1}{2}  M  \dot x^2 + \frac{1}{2} m((\dot x + \ell  \dot \theta  cos(\theta))^2 + (\ell  \dot \theta  sin(\theta))^2) \\
             T &= \frac{1}{2}  M  \dot x^2 + \frac{1}{2}  m(\dot x^2 + 2 \dot x  \ell  \dot \theta  cos(\theta) + \ell^2  \dot \theta^2 cos(\theta)^2 + \ell^2  \dot \theta^2  sin(\theta)^2) \\
@@ -55,5 +59,26 @@
         \end{aligned}
     \end{equation}
 
+    Then, for $V$, the potential energy of the system
+
+    \begin{equation} \label{eq:potential}
+        V = -mg\ell cos(\theta)
+    \end{equation}
     
+    Lastly, using (\ref{eq:kinetic}) and (\ref{eq:potential}) the 
+    Lagrangian, $\mathcal{L}$, can be formulated
+    
+    \begin{equation} \label{eq:lagrangian_full}
+        \mathcal{L} = \frac{1}{2}(M + m) \dot x^2 + m \dot x \ell \dot \theta cos(\theta) + \frac{1}{2}m \ell^2 \dot \theta^2 + mg\ell cos(\theta)
+    \end{equation}
+
+    \section{Solve for $\ddot \theta$}
+    Using the Lagrangian equation (\ref{eq:lagrangian_eq})
+
+    \begin{equation} \label{eq:lagrangian_eq}
+        \frac{d}{dt} \left(\frac{\partial \mathcal{L}}{\partial \dot q} \right) = 
+        \frac{\partial \mathcal{L}}{\partial q}
+    \end{equation}
+
+    \section{Solve for $\ddot x$}
 \end{document}
