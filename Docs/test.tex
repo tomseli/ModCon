@@ -73,8 +73,8 @@
 
     \begin{equation} \label{eq:potential}
         \begin{aligned}
-        V &= m_1gy_1 + m_2gy_2     \\
-        V &= -m_1g\ell_1\cos(\theta_1) - m_2g\ell_2\cos(\theta_2)\\
+        V &= m_1g(y_1) + m_2g(y_2)     \\
+        V &= -m_1g\ell_1\cos(\theta_1) - m_2g(\ell_1\cos(\theta_1) +\ell_2\cos(\theta_2))\\
         V &= -(m_1+m_2)g\ell_1\cos(\theta_1) - m_2g\ell_2\cos(\theta_2)
         \end{aligned}
     \end{equation}
@@ -87,13 +87,13 @@
             \mathcal{L} = & \frac{1}{2}(M + m_1) \dot x_c^2 \\
             & + \frac{1}{2}(m_1 + m_2)\ell_1^2\dot\theta_1^2 \\
             & + \frac{1}{2} m_2 \left(2\ell_1\ell_2 \dot\theta_1 \dot\theta_2 \cos(\theta_1 - \theta_2) + \ell_2^2\dot\theta_2^2 + 2\dot x_c(\ell_1 \dot \theta_1 \cos(\theta_1) + \ell_2 \dot \theta_2 \cos(\theta_2))\right) \\
-            & + (m_1 + m_2)g\ell_1\cos(\theta_1) - m_2g\ell_2\cos(\theta_2)
+            & + (m_1 + m_2)g\ell_1\cos(\theta_1) + m_2g\ell_2\cos(\theta_2)
         \end{aligned}
     \end{equation}
     
 
     \pagebreak
-    \section{Solve for $\ddot \theta$}
+    \section{Solve for $\ddot \theta_1$}
 
     Using the Lagrangian equation (\ref{eq:lagrangian_eq})
     \begin{equation} \label{eq:lagrangian_eq}
@@ -102,7 +102,6 @@
     \end{equation}
 
     Substituting (\ref{eq:lagrangian_full}) in equation (\ref{eq:lagrangian_eq}) and solving for $\theta_1$ gives:
-
     \begin{equation} \label{eq: lagrange Step1}
         \frac{\partial \mathcal{L}}{\partial \dot\theta_1} = 
          (m_1 + m_2)\ell_1^2\dot\theta_1 + m_2\ell_1\ell_2\dot\theta_2\cos(\theta_1 - \theta_2) + m_2\dot x_c\ell_1\cos(\theta_1)
@@ -118,10 +117,10 @@
 
     
     \begin{equation} \label{eq: lagrange Step3}
-        \frac{\partial \mathcal{L}}{\partial\theta_1} = 
-        m_2\ell_1\ell_2\dot\theta_1\dot\theta_2\sin(\theta_1-\theta_2) 
-        -m_2\dot x_c\ell_1\dot\theta_1\sin(\theta_1)
+        \frac{\partial \mathcal{L}}{\partial\theta_1} =
+        -m_2\ell_1\ell_2\dot\theta_1\dot\theta_2\sin(\theta_1-\theta_2) 
         - (m_1 + m_2)g\ell_1\sin(\theta_1)
+        -m_2\dot x_c\ell_1\dot\theta_1\sin(\theta_1)
     \end{equation}
 
     Which give the following differential equation:
@@ -129,8 +128,8 @@
     \begin{equation}
         \begin{aligned}
             &(m_1 + m_2)\ell_1^2\ddot\theta_1   +   m_2\ell_1\ell_2\ddot\theta_2\cos(\theta_1 - \theta_2)  -m_2\ell_1\ell_2\dot\theta_2\sin(\theta_1-\theta_2)(\dot\theta_1 - \dot\theta_2)\\
-            &+   m_2\ddot x_c\ell_1\cos(\theta_1) - m_2 \dot x_c\ell_1\sin(\theta_1)\dot\theta_1 - m_2\ell_1\ell_2\dot\theta_1\dot\theta_2\sin(\theta_1-\theta_2)\\ 
-            &-m_2\dot x_c\ell_1\dot\theta_1\sin(\theta_1) - (m_1 + m_2)g\ell_1\sin(\theta_1) = 0
+            &+   m_2\ddot x_c\ell_1\cos(\theta_1) - m_2 \dot x_c\ell_1\sin(\theta_1)\dot\theta_1 + m_2\ell_1\ell_2\dot\theta_1\dot\theta_2\sin(\theta_1-\theta_2) \\ 
+            & + (m_1 + m_2)g\ell_1\sin(\theta_1) + m_2\dot x_c\ell_1\dot\theta_1\sin(\theta_1) = 0
         \end{aligned}
     \end{equation}   
 
@@ -139,19 +138,84 @@
 
     \begin{equation}
         \begin{aligned}
-            &(m_1 + m_2)\ell_1\ddot\theta_1   +   m_2\ell_2\ddot\theta_2\cos(\theta_1 - \theta_2)  -m_2\ell_2\dot\theta_2^2\sin(\theta_1-\theta_2)\\
-            &+   m_2\ddot x_c\cos(\theta_1) - (m_1 + m_2)g\sin(\theta_1) = 0
+            &(m_1 + m_2)\ell_1\ddot\theta_1   +   m_2\ell_2\ddot\theta_2\cos(\theta_1 - \theta_2)  +  m_2\ell_2\dot\theta_2^2\sin(\theta_1-\theta_2)\\
+            &+   m_2\ddot x_c\cos(\theta_1) + (m_1 + m_2)g\sin(\theta_1) = 0
         \end{aligned}
     \end{equation}  
 
     With the differential equation solved for $\ddot \theta_1$:
     \begin{equation}
         \begin{aligned}
-            \frac{m_2\ell_2\ddot\theta_2\cos(\theta_1 - \theta_2)  -m_2\ell_2\dot\theta_2^2\sin(\theta_1-\theta_2)
-            +   m_2\ddot x_c\cos(\theta_1) - (m_1 + m_2)g\sin(\theta_1)}{-(m_1 + m_2)\ell_1} = \ddot \theta_1
+            \frac{m_2\ell_2\ddot\theta_2\cos(\theta_1 - \theta_2)  +m_2\ell_2\dot\theta_2^2\sin(\theta_1-\theta_2)
+            +   m_2\ddot x_c\cos(\theta_1) + (m_1 + m_2)g\sin(\theta_1)}{-(m_1 + m_2)\ell_1} = \ddot \theta_1
         \end{aligned}
     \end{equation}  
     
+
+
+
+
+
     
+    \pagebreak
+    \section{Solve for $\ddot \theta_2$}
+
+    Using the Lagrangian equation (\ref{eq:lagrangian_eq})
+    \begin{equation} \label{eq:lagrangian_eq}
+        \frac{d}{dt} \left(\frac{\partial \mathcal{L}}{\partial \dot q} \right) = 
+        \frac{\partial \mathcal{L}}{\partial q}
+    \end{equation}
+
+    Substituting (\ref{eq:lagrangian_full}) in equation (\ref{eq:lagrangian_eq}) and solving for $\theta_1$ gives:
+
+    \begin{equation} \label{eq: lagrange Step1}
+        \frac{\partial \mathcal{L}}{\partial \dot\theta_1} = 
+        m_2 \ell_1 \ell_2 \dot \theta_1 \cos(\theta_1 - \theta_2)
+        + m_2\ell_2^2 \dot\theta_2 
+        + m_2 \dot x_c \ell_2 \cos(\theta_2)
+    \end{equation}
+
+    \begin{equation} \label{eq: lagrange Step2}
+        \begin{aligned}
+        \frac{d}{dt} \left(\frac{\partial \mathcal{L}}{\partial \dot\theta_1}\right) &= 
+        m_2 \ell_1 \ell_2 \ddot \theta_1 \cos(\theta_1 - \theta_2) - m_2 \ell_1 \ell_2 \dot \theta_1 \sin(\theta_1 - \theta_2)(\dot \theta_1 - \dot \theta_2)\\
+        &+m_2\ell_2^2 \ddot \theta_2 + m_2 \ddot x_c \ell_2 \cos(\theta_2) - m_2 \dot x_c \ell_2 \sin(\theta_2)\dot\theta_2
+        \end{aligned}
+    \end{equation}
+
+    
+    \begin{equation} \label{eq: lagrange Step3}
+        \frac{\partial \mathcal{L}}{\partial\theta_1} =
+        -m_2 \ell_1 \ell_2 \dot \theta_1 \dot\theta_2\sin(\theta_1-\theta_2)
+        -m_2\dot x_c \dot \theta_2 \ell_2 \sin(\theta_2)
+        -m_2g\ell_2\sin(\theta_2)
+        \end{equation}
+
+    Which give the following differential equation:
+
+    \begin{equation}
+        \begin{aligned}
+                &m_2 \ell_1 \ell_2 \ddot \theta_1 \cos(\theta_1 - \theta_2) - m_2 \ell_1 \ell_2 \dot \theta_1 \sin(\theta_1 - \theta_2)(\dot \theta_1 - \dot \theta_2)\\
+                &+m_2\ell_2^2 \ddot \theta_2 + m_2 \ddot x_c \ell_2 \cos(\theta_2) - m_2 \dot x_c \ell_2 \sin(\theta_2)\dot\theta_2 + m_2 \ell_1 \ell_2 \dot \theta_1 \dot\theta_2\sin(\theta_1 - \theta_2)\\
+                &+m_2\dot x_c \dot \theta_2 \ell_2 \sin(\theta_2)+m_2g\ell_2\sin(\theta_2) = 0
+        \end{aligned}
+    \end{equation}   
+
+
+    Which simplifies to:
+
+    \begin{equation}
+        \begin{aligned}
+            &m_2\ell_2 \ddot \theta_2 + m_2 \ell_1  \ddot \theta_1 \cos(\theta_1 - \theta_2) - m_2 \ell_1\dot \theta_1^2 \sin(\theta_1 - \theta_2)+ m_2 \ddot x_c  \cos(\theta_2) +m_2g\sin(\theta_2) =0
+        \end{aligned}
+    \end{equation}  
+
+    With the differential equation solved for $\ddot \theta_1$:
+    \begin{equation}
+        \begin{aligned}
+            \frac{m_2 \ell_1  \ddot \theta_1 \cos(\theta_1 - \theta_2) - m_2 \ell_1\dot \theta_1^2 \sin(\theta_1 - \theta_2)+ m_2 \ddot x_c  \cos(\theta_2) +m_2g\sin(\theta_2)}{-m_2 \ell_2} = \ddot \theta_2
+        \end{aligned}
+    \end{equation}  
+
     \section{Solve for $\ddot x$}
 \end{document}
