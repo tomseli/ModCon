@@ -34,35 +34,36 @@ D = np.array(
 Q = np.eye(2)
 R = np.eye(1)
 
-# Uitzoeken wat hier gaande is
+# TODO: Uitzoeken wat hier gaande is
 P = solve_continuous_are(A, B, Q, R)
 K = np.dot(np.linalg.inv(R), np.dot(B.T, P))
 
 # Initial state
 x0 = np.array([[1.0], [0]])
-sp = 1
-
-# Output storage
 x = x0
+
+# Output storage for plotting
 x1 = []
 x2 = []
 y = []
 u = []
 
+## Simulation ##
 for i in range(0, N):
     u_lqr = -np.dot(K, x)
     u.append(u_lqr[0])
 
-    x_dot = np.dot(A, x) + np.dot(B, u_lqr)
+    x_dot = A@x + B@u_lqr
     
     x = x + x_dot * dt
 
     x1.append(x[0])
     x2.append(x[1]) 
     
-    y_out = np.dot(C, x) + np.dot(D, u_lqr)
+    y_out = C@x + D@u_lqr
     y.append(y_out)
 
+## Plots ##
 plt.figure(figsize=(6, 10))
 
 plt.subplot(3, 1, 1)
