@@ -31,6 +31,10 @@ D = np.array(
     [0.0]
 )
 
+# Q = np.array([
+#     [1.0, 0.0],
+#     [0.0, 5.5]])
+
 Q = np.eye(2)
 R = np.eye(1)
 
@@ -39,7 +43,7 @@ P = solve_continuous_are(A, B, Q, R)
 K = np.dot(np.linalg.inv(R), np.dot(B.T, P))
 
 # Initial state
-x0 = np.array([[1.0], [0]])
+x0 = np.array([[1.0], [1.0]])
 x = x0
 
 # Output storage for plotting
