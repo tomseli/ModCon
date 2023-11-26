@@ -63,8 +63,8 @@ pendulum.m2  = 0.5
 pendulum.cf2 = pendulum.m2/20.1428571428571428571428571428571
 
 
-cart.m = 100
-cart.cf = 5
+cart.m = 1
+cart.cf = 2
 cart.x = 0.0
 
 f = 0
