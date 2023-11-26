@@ -11,7 +11,6 @@ dt = T/N
 m = 0.2
 b = 0.5
 k = 10 
-u = 1 # [f]
 
 # Matrices
 A = np.array(
@@ -48,9 +47,11 @@ x = x0
 x1 = []
 x2 = []
 y = []
+u = []
 
 for i in range(0, N):
     u_lqr = -np.dot(K, x)
+    u.append(u_lqr[0])
 
     x_dot = np.dot(A, x) + np.dot(B, u_lqr)
     
@@ -62,18 +63,24 @@ for i in range(0, N):
     y_out = np.dot(C, x) + np.dot(D, u_lqr)
     y.append(y_out)
 
-plt.figure()
+plt.figure(figsize=(6, 10))
 
-plt.subplot(2, 1, 1)
+plt.subplot(3, 1, 1)
 plt.plot(x1, label="$x_1$") # x1 = x
 plt.plot(x2, label="$x_2$") # x2 = x'
 plt.title("State variables")
 plt.legend()
 plt.grid()
 
-plt.subplot(2, 1, 2)
+plt.subplot(3, 1, 2)
 plt.plot(y, label="$y$") # y = x
 plt.title("Output variables")
+plt.legend()
+plt.grid()
+
+plt.subplot(3, 1, 3)
+plt.plot(u, label="$u$") # u = f
+plt.title("Control")
 plt.legend()
 plt.grid()
 
