@@ -39,8 +39,15 @@ D = np.array(
 )
 
 R = np.array(
-    [0.01]
+    [0.1]
 )
+
+# Q = np.array(
+#     [[1, 0, 0, 0],
+#      [0, 1, 0, 0],
+#      [0, 0, 1, 0],
+#      [0, 0, 0, 1]]
+# )
 
 Q = np.array(
     [[1, 0, 0, 0],
@@ -53,10 +60,8 @@ time = np.arange(0, t_max, step=(t_max/float(N)))
 
 K, S, E = ct.lqr(A, B, Q, R)
 
-# K = ct.place(A, B, [0, -0.1, -6, -20])
-
 sys = ct.ss(A-B@K, B, C, D)
-t, y = ct.impulse_response(sys, time)
+y, t = ct.impulse_response(sys, time)
 
 fig, (ax1, ax2) = plt.subplots(1, 2)
 ax1.plot(t, y[0][0], label="$x$")
