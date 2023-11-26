@@ -1,38 +1,47 @@
 import numpy as np
-import control as ct
 from matplotlib import pyplot as plt
+from scipy.linalg import solve_continuous_are
 
 ## Simulation properties ##
 N = 1000
-sim_time = 2
-dt = sim_time/N
+T = 5
+dt = T/N
 
 ## System properties ##
-m = 0.1
+m = 0.2
 b = 0.5
-k = 10
-f = 1
+k = 10 
+u = 1 # [f]
 
 # Matrices
 A = np.array(
-    [[0, 1],
+    [[0.0, 1.0],
     [-k/m, -b/m]]
 )
 
 B = np.array(
-    [0, 1/m]
+    [[0.0], 
+     [1/m]]
 )
 
 C = np.array(
-    [1, 0]
+    [1.0, 0.0]
 )
 
 D = np.array(
-    [0]
+    [0.0]
 )
 
+Q = np.eye(2)
+R = np.eye(1)
+
+# Uitzoeken wat hier gaande is
+P = solve_continuous_are(A, B, Q, R)
+K = np.dot(np.linalg.inv(R), np.dot(B.T, P))
+
 # Initial state
-x0 = np.array([0, 0])
+x0 = np.array([[1.0], [0]])
+sp = 1
 
 # Output storage
 x = x0
@@ -41,15 +50,17 @@ x2 = []
 y = []
 
 for i in range(0, N):
-    x_dot = np.dot(A, x) + np.dot(B, f)
+    u_lqr = -np.dot(K, x)
+
+    x_dot = np.dot(A, x) + np.dot(B, u_lqr)
     
     x = x + x_dot * dt
-    
+
     x1.append(x[0])
     x2.append(x[1]) 
     
-    y.append(np.dot(C, x) + np.dot(D, f))
-
+    y_out = np.dot(C, x) + np.dot(D, u_lqr)
+    y.append(y_out)
 
 plt.figure()
 
@@ -68,4 +79,3 @@ plt.grid()
 
 plt.tight_layout()
 plt.show()
-    
