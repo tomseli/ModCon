@@ -62,7 +62,7 @@ class PhysicsCartPendulum(PhysicsBase):
         self.cart = cart
         
         # Properties
-        self.g = 9.81
+        self.g = -9.81
         self.l = 0
         self.m = 0
         self.cf = 0 # temporary approx. to dampening
@@ -84,4 +84,4 @@ class PhysicsCartPendulum(PhysicsBase):
         self.theta_d = self.theta_d + self.theta_dd * dt
         self.theta = self.theta + self.theta_d * dt
 
-        return self.theta
+        return -self.theta

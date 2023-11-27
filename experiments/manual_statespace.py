@@ -43,7 +43,7 @@ P = solve_continuous_are(A, B, Q, R)
 K = np.dot(np.linalg.inv(R), np.dot(B.T, P))
 
 # Initial state
-x0 = np.array([[1.0], [1.0]])
+x0 = np.array([[10.0], [0.0]])
 x = x0
 
 # Output storage for plotting
