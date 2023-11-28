@@ -21,6 +21,7 @@ RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 
+## Rendering Objects ##
 pygame.init()
 screen = pygame.display.set_mode([WIDTH, HEIGHT])
 clock = pygame.time.Clock()
@@ -61,12 +62,13 @@ cart.set_limit(CART_SPACE)
 # Space
 coordinates = list(MIDDLE)
 
-# Control
+## Controllers ## 
 ctrlLQR = controller.ControlLQR(pendulum)
 ctrlPID1 = controller.ControlPID()
 ctrlPID2 = controller.ControlPID()
 
 ctrlLQR.init()
+# ctrlLQR.toggleNoise(0.01)
 
 ctrlPID1.kp = 1.0
 ctrlPID1.ki = 0.2
@@ -76,8 +78,8 @@ ctrlPID2.kp = 20
 ctrlPID2.ki = 0.5
 ctrlPID2.kd = 1.5
 
-ctrlPID2.addLPFilter(0.01)
-ctrlPID2.addLimit(5)
+# ctrlPID2.addLPFilter(0.006)
+# ctrlPID2.addLimit(5)
 
 ctrlPID1.enableLogging()
 ctrlPID2.enableLogging()
@@ -113,7 +115,6 @@ while running:
 
     if(enable_control == 1):
         f = ctrlLQR.control() + disturb
-        print(f)
     elif(enable_control == 2):
         sp_theta = -ctrlPID1.control(cart.x, 0, dt)
         f = ctrlPID2.control(pendulum.theta, sp_theta, dt) + disturb
@@ -121,6 +122,7 @@ while running:
         f = 0
     disturb = 0
 
+    # Physics
     cart.f = f
     x = cart.step(dt)
     theta = pendulum.step(dt)
@@ -162,5 +164,5 @@ while running:
 
 pygame.quit()
 
-ctrlPID2.plotLogs("Controller 2", False)
-ctrlPID1.plotLogs("Controller 1", True)
+ctrlPID2.plotLogs("Controller 2 PID", False)
+ctrlPID1.plotLogs("Controller 1 PID", True)

@@ -129,6 +129,8 @@ class ControlLQR():
         self.l = self.pendulum.l
         self.b = self.pendulum.cart.cf
         self.g = 9.81
+
+        self.enable_noise = False
         return
 
    
@@ -181,7 +183,10 @@ class ControlLQR():
     def control(self) -> float:
         x1 = self.pendulum.cart.x
         x2 = self.pendulum.cart.x_d
-        x3 = self.pendulum.theta
+        if(self.enable_noise):
+            x3 = self.pendulum.theta + np.random.normal(0.0, self.noise_sd)
+        else:
+            x3 = self.pendulum.theta
         x4 = self.pendulum.theta_d
         x = np.array(
             [[x1],
@@ -190,3 +195,8 @@ class ControlLQR():
              [x4]]
         )        
         return -np.dot(self.K, x)[0][0]
+    
+    def toggleNoise(self, sd : float) -> None:
+        self.enable_noise = not self.enable_noise
+        self.noise_sd = sd
+        return
