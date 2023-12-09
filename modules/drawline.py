@@ -23,8 +23,7 @@ class Line():
             3)
         return
     
-    # Bugged, angles do not match the correct direction
     def polarr(self, origin : (int, int), angle : float, 
         length : float, color : (int, int, int)) -> None:
-        self.polard(origin, np.rad2deg(angle+np.pi), length, color)
+        self.polard(origin, np.rad2deg(angle), length, color)
         return

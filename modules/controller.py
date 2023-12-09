@@ -1,8 +1,10 @@
 from matplotlib import pyplot as plt
+from scipy.linalg import solve_continuous_are
 import numpy as np
-import lowpass
+from modules import lowpass
+from modules import physics
 
-class Control():
+class ControlPID():
     def __init__(self) -> None:
         self.kp = 0
         self.ki = 0
@@ -118,4 +120,83 @@ class Control():
          
         plt.show(block=block)
         
+class ControlLQR():
+    def __init__(self, pendulum : physics.PhysicsCartPendulum) -> None:
+        self.pendulum = pendulum
+        self.I = self.pendulum.m * self.pendulum.l**2
+        self.m = self.pendulum.m
+        self.M = self.pendulum.cart.m
+        self.l = self.pendulum.l
+        self.b = self.pendulum.cart.cf
+        self.g = 9.81
 
+        self.enable_noise = False
+        return
+
+   
+    def init(self) -> None:
+        g = self.g
+        I = self.I
+        m = self.m
+        M = self.M
+        l = self.l
+        b = self.b
+        
+        p = I*(M+m) + M*m*l**2
+
+        # Matrices
+        # Ingevuld naar:
+        # https://ctms.engin.umich.edu/CTMS/index.php?example=InvertedPendulum&section=SystemModeling    
+        A = np.array(
+            [[0, 1, 0, 0], 
+             [0, -(I+m*l**2)*b/p, (m**2*g*l**2)/p, 0], 
+             [0, 0, 0, 1], 
+             [0, -m*l*b/p, m*g*l*(M+m)/p, 0]]
+        )
+
+        B = np.array(
+            [[0],
+            [(I+m*l**2)/p],
+            [0],
+            [m*l/p]]
+        )
+
+        # C = np.array(
+        #     [[1, 0, 0, 0],
+        #     [0, 0, 1, 0]]
+        # )
+
+        # D = np.array(
+        #     [[0],
+        #     [0]]
+        # )
+
+        self.Q = np.eye(4)
+        self.R = np.eye(1)   
+
+        # Control
+        P = solve_continuous_are(A, B, self.Q, self.R)
+        self.K = np.dot(np.linalg.inv(self.R), np.dot(B.T, P))   
+
+        return
+
+    def control(self) -> float:
+        x1 = self.pendulum.cart.x
+        x2 = self.pendulum.cart.x_d
+        if(self.enable_noise):
+            x3 = self.pendulum.theta + np.random.normal(0.0, self.noise_sd)
+        else:
+            x3 = self.pendulum.theta
+        x4 = self.pendulum.theta_d
+        x = np.array(
+            [[x1],
+             [x2],
+             [x3],
+             [x4]]
+        )        
+        return -np.dot(self.K, x)[0][0]
+    
+    def toggleNoise(self, sd : float) -> None:
+        self.enable_noise = not self.enable_noise
+        self.noise_sd = sd
+        return
