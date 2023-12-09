@@ -187,7 +187,7 @@ class PhysicsDoublePendulumCart(PhysicsBase):
             [0, 0, 0, 0, 0, 1],
             [0, (g*(m1 + m2)*(-l1*m2-l2*m2))/num1, (g*(-l1*m2-l2*m2))/num1, 0, 0, 0],
             [0, (g*(m1+m2)*(M+m1-m2))/num1, (g*(M+m1-m2))/num1, 0, 0, 0],
-            [0, (g*(m1+m2)*(-M*l2-l1*m2-(l2**2)*m1))/num2, (g*(-M*l2-l1*m2-l2*m1))/num2, 0, 0, 0]]
+            [0, (g*(m1+m2)*(-M*l2-l1*m2-l2*m1))/num2, (g*(-M*l2-l1*m2-l2*m1))/num2, 0, 0, 0]]
         )
 
         self.B = np.array(
