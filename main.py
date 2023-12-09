@@ -16,6 +16,7 @@ CART_SPACE = 0.35
 HEIGHT = 500
 WIDTH = 1000
 MIDDLE = (WIDTH/2, HEIGHT/2)
+SCALE = 500
 
 WHITE = (255, 255, 255)
 RED = (255, 0, 0)
@@ -35,10 +36,9 @@ text_disabled = font.render('Control Disabled', True, RED)
 
 ## Physics ##
 cart = physics.PhysicsCart()
-pendulum = physics.DoublePendulum(cart)
+pendulum = physics.PhysicsDoublePendulum(cart)
 cart.addPendulum(pendulum)
-controller1 = controller.ControlPID()
-controller2 = controller.ControlPID()
+control = controller.ControlLQR(pendulum)
 
 ## Sim variables ##
 # I/O
@@ -52,13 +52,13 @@ pendulum.theta2 = 0
 dt = 0
 
 # Properties
-pendulum.l1 = 0.5
-pendulum.m1 = 0.5
+pendulum.l1 = 0.2
+pendulum.m1 = 0.1
 pendulum.cf = pendulum.m1/20.1428571428571428571428571428571
 
 
-pendulum.l2  = 0.5
-pendulum.m2  = 0.5
+pendulum.l2  = 0.2
+pendulum.m2  = 0.1
 pendulum.cf2 = pendulum.m2/20.1428571428571428571428571428571
 
 cart.m = 100
@@ -72,20 +72,13 @@ cart.set_limit(CART_SPACE)
 # Space
 coordinates = list(MIDDLE)
 
-# PID
-controller1.kp = 0
-controller1.ki = 0
-controller1.kd = 0
-
-controller2.kp = 0
-controller2.ki = 0
-controller2.kd = 0
-
-controller2.addLPFilter(0.01)
-controller2.addLimit(5)
-
-controller1.enableLogging()
-controller2.enableLogging()
+# Control
+control.M = cart.m
+control.m1 = pendulum.m1
+control.m2 = pendulum.m2
+control.l1 = pendulum.l1
+control.l2 = pendulum.l2
+control.init()
 
 ## Rendering variables ##
 rect_w = 50
@@ -100,9 +93,9 @@ while running:
             running = False
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
-                disturb = -50
+                disturb = -10
             if event.key == pygame.K_RIGHT:
-                disturb = 50
+                disturb = 10
             if event.key == pygame.K_DOWN:
                 enable_control = False
     
@@ -113,14 +106,13 @@ while running:
 #         if(theta > 3.14 + 0.5 or theta < 3.14 - 0.5):
 #             running = False
 # =============================================================================
-        sp_theta = controller1.control(cart.x, 0, dt)
-        f = -controller2.control(pendulum.theta1, sp_theta, dt) + disturb
+        f = control.control() + disturb
+        print(control.control())
     else:
-        f = 0
+        f = 0 + disturb
     disturb = 0
     cart.f = f
     theta1, theta2, x = pendulum.step(dt)
-    print(theta2)
 
     ## Rendering ## 
     # Background
@@ -128,14 +120,14 @@ while running:
 
     # Additional visuals
     pygame.draw.circle(screen, (0, 0, 0), 
-                       (WIDTH/2+(CART_SPACE*1000)+rect_h, HEIGHT/2), 5)
+                       (WIDTH/2+(CART_SPACE*SCALE)+rect_h, HEIGHT/2), 5)
     pygame.draw.circle(screen, (0, 0, 0), 
-                       (WIDTH/2-(CART_SPACE*1000)-rect_h, HEIGHT/2), 5)
+                       (WIDTH/2-(CART_SPACE*SCALE)-rect_h, HEIGHT/2), 5)
     pygame.draw.line(
         screen, 
         (10, 10, 10), 
-        (WIDTH/2+(CART_SPACE*1000)+rect_h, HEIGHT/2), 
-        (WIDTH/2-(CART_SPACE*1000)-rect_h, HEIGHT/2)
+        (WIDTH/2+(CART_SPACE*SCALE)+rect_h, HEIGHT/2), 
+        (WIDTH/2-(CART_SPACE*SCALE)-rect_h, HEIGHT/2)
         )
     if(enable_control):
         screen.blit(text_enabled, (20, 20))
@@ -143,24 +135,21 @@ while running:
         screen.blit(text_disabled, (20, 20))
 
     # Cart + Pendulum
-    rect_x = coordinates[0]-rect_w/2+(x*1000)
+    rect_x = coordinates[0]-rect_w/2+(x*SCALE)
     rect_y = coordinates[1]-rect_h/2
     rect = pygame.Rect((rect_x, rect_y), 
                        (rect_w, rect_h))
     pygame.draw.rect(screen, BLUE, rect)
-    line.polarr((rect.center), theta1, pendulum.l1*200, RED)
+    line.polarr((rect.center), theta1, pendulum.l1*SCALE, RED)
     line2.polarr(
-        (rect.center[0] + pendulum.l1*200*np.sin(theta1), 
-         rect.center[1] - pendulum.l1*200*np.cos(theta1)), 
-         theta2, pendulum.l2*200, BLUE)
+        (rect.center[0] + pendulum.l1*SCALE*np.sin(theta1), 
+         rect.center[1] - pendulum.l1*SCALE*np.cos(theta1)), 
+         theta2, pendulum.l2*SCALE, BLUE)
 
     # Refresh
     pygame.display.flip()
 
     # Time keeping
     dt = clock.tick(480)/2000
-
-# controller2.plotLogs("Controller 2", False)
-# controller1.plotLogs("Controller 1", True)
 
 pygame.quit()

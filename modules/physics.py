@@ -58,8 +58,7 @@ class PhysicsCart(PhysicsBase):
         self.x_max = x_offset
         
         
-
-class DoublePendulum:
+class PhysicsDoublePendulum:
     def __init__(self, cart : PhysicsCart):
         self.cart = cart
         

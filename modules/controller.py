@@ -1,8 +1,10 @@
 from matplotlib import pyplot as plt
 import numpy as np
+from scipy.linalg import solve_continuous_are
 from modules import lowpass
+from modules import physics
 
-class Control():
+class ControlPID():
     def __init__(self) -> None:
         self.kp = 0
         self.ki = 0
@@ -118,4 +120,95 @@ class Control():
          
         plt.show(block=block)
         
+class ControlLQR():
+    def __init__(self, pendulum = physics.PhysicsDoublePendulum) -> None:
+        self.M = 0
+        self.m1 = 0
+        self.m2 = 0
+        self.l1 = 0
+        self.l2 = 0
+        self.g = 9.81
 
+        self.pendulum = pendulum
+        return
+
+    def init(self) -> None:
+        m1 = self.m1
+        m2 = self.m2
+        M = self.M
+        l1 = self.l1
+        l2 = self.l2
+        g = self.g
+
+        num1 = \
+        + M*l1*m1 
+        + M*l2*m2 
+        - M*l2*m2 
+        + l1*(m2**2) 
+        - 3*l1*(m2**2) 
+        - l2*m1*m2 
+        -l2*(m2**2) 
+
+        num2 = \
+        + M*l1*l2*m1
+        + M*l1*l2*m2
+        - M*(l2**2)*m2
+        + l1*l2*(m1**2)
+        - 3*l1*l2*(m2**2)
+        - (l2**2)*m1*m2
+        - (l2**2)*(m2**2)
+
+        self.A = np.array(
+            [[0, 0, 0, 1, 0, 0],
+            [0, 0, 0, 0, 1, 0],
+            [0, 0, 0, 0, 0, 1],
+            [0, (g*(m1 + m2)*(-l1*m2-l2*m2))/num1, (g*(-l1*m2-l2*m2))/num1, 0, 0, 0],
+            [0, (g*(m1+m2)*(M+m1-m2))/num1, (g*(M+m1-m2))/num1, 0, 0, 0],
+            [0, (g*(m1+m2)*(-M*l2-l1*m2-(l2**2)*m1))/num2, (g*(-M*l2-l1*m2-l2*m1))/num2, 0, 0, 0]]
+        )
+
+        self.B = np.array(
+            [[0],
+            [0],
+            [0],
+            [(l1*m1+l1*m2-l2*m2)/num1],
+            [-(2*m2)/num1],
+            [(l1*m1+l1*m2-l2*m2)/num2]]
+        )
+
+        self.R = np.array(
+            [[0.1]]
+        )
+        
+        i = 1
+        self.Q = np.array(
+            [[i, 0, 0, 0, 0, 0],
+             [0, i, 0, 0, 0, 0],
+             [0, 0, i, 0, 0, 0],
+             [0, 0, 0, i, 0, 0],
+             [0, 0, 0, 0, i, 0],
+             [0, 0, 0, 0, 0, i]]
+        )
+
+        self.P = solve_continuous_are(self.A, self.B, self.Q, self.R)
+        self.K = np.linalg.inv(self.R)@(self.B.T@self.P)
+        return
+    
+    def control(self) -> float:
+        x1 = self.pendulum.x
+        x2 = self.pendulum.theta1
+        x3 = self.pendulum.theta2
+        x4 = self.pendulum.x
+        x5 = self.pendulum.theta1_d
+        x6 = self.pendulum.theta2_d
+
+        X = np.array(
+            [[x1],
+             [x2],
+             [x3],
+             [x4],
+             [x5],
+             [x6]]
+        )
+
+        return np.dot(self.K, X)[0][0]
