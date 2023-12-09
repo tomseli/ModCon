@@ -68,7 +68,7 @@ class DoublePendulum:
         self.m2 = 0
         self.l1 = 0
         self.l2 = 0
-        self.g = 9.81
+        self.g = -9.81
         self.theta1 = 0
         self.theta2 = 0
         self.theta1_d = 0
