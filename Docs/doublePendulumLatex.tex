@@ -2,7 +2,6 @@
 \usepackage{fullpage}
 \usepackage{graphicx}
 \usepackage{amsmath}
-\usepackage{amsmath} 
 
 \author{Mirko van de Hoef}
 \title{Deriving equations of motions of a double pendulum on a cart using the Lagrangian}
@@ -62,16 +61,16 @@
     \begin{equation}
         \begin{aligned} \label{eq:kinetic}
             T = &\frac{1}{2}  M  \dot x_c^2 + \frac{1}{2}  m_1(\dot x_1^2 + \dot y_1^2) + \frac{1}{2}m_2(\dot x_2^2 + \dot y_2^2) \\
-            T = &\frac{1}{2}  M  \dot x_c^2 + \frac{1}{2}  m_1\left((\ell_1 \dot \theta_1 \cos(\theta_1) + \dot x_c)^2 + (\ell_1 \dot \theta_1 \sin(\theta_1))^2\right) \\
-            &+ \frac{1}{2}  m_2\left((\ell_1 \dot \theta_1 \cos(\theta_1) + \dot x_c + \ell_2 \dot \theta_2\cos(\theta_2))^2 + (\ell_1 \dot \theta_2 \sin(\theta_1) + \ell_2\dot\theta_2\sin(\theta_2))^2\right)\\
-            T = &\frac{1}{2} M\dot x_c^2 + \frac{1}{2}m_1(\ell_1^2\dot\theta_1^2 + \dot x_c^2 + \dot\theta_1^2\ell_1^2\sin(\theta_1)) + \frac{1}{2} m_2(...)\\
-            T = &... + \frac{1}{2}m_2(\ell_1^2\dot\theta_1^2\cos(\theta_1)^2   \\
-             &+ 2\ell_1\dot\theta_1\cos(\theta_2)\dot x_c + 2\ell_1\dot\theta_1\cos(\theta_1)\ell_2\dot\theta_2\cos(\theta_2)\\
-             &+ \dot x_c^2 + 2\dot x_c \ell_2 \dot \theta_2 \cos(\theta_2) + \ell_2^2\dot\theta_2^2\cos(\theta_2)^2 \\
-             &+\ell_1^2\dot\theta_1^2\sin(\theta_1)^2  +   2\ell_1\ell_2\dot\theta_1\dot\theta_2\sin(\theta_1)\sin(\theta_2) + \ell_2^2\dot\theta_2^2\sin(\theta_2)^2)\\
-             T = &... + \frac{1}{2}m_2(\ell_1^2\dot\theta_1^2 + 2\ell_1\ell_2\dot\theta_1\dot\theta_2\cos(\theta_1 - \theta_2) + \ell_2^2\dot\theta_2^2     +      2\dot x_c(\ell_1\dot\theta_1\cos(\theta_1) + \ell_2\dot\theta_2\cos(\theta_2)))\\
-             T = &\frac{1}{2}  (M + m_1)  \dot x_c^2 + \frac{1}{2}(m_1 + m_2)\ell_1^2\dot\theta_1^2\\
-                 &+ \frac{1}{2}m_2(2\ell_1\ell_2\dot\theta_1\dot\theta_2\cos(\theta_1 - \theta_2) + \ell_2^2\dot\theta_2^2     +      2\dot x_c(\ell_1\dot\theta_1\cos(\theta_1) + \ell_2\dot\theta_2\cos(\theta_2)))\\
+            T = &\frac{1}{2}  M  \dot x_c^2 + \frac{1}{2}  m_1\left((\ell_1 \dot \theta_1 \cos(\theta_1) + \dot x_c)^2 + (\dot y_1)^2\right) \\
+            &+ \frac{1}{2}  m_2\left((\ell_1 \dot \theta_1 \cos(\theta_1) + \dot x_c + \ell_2 \dot \theta_2\cos(\theta_2))^2 + (\dot y_2)^2\right)\\
+            T = &\frac{1}{2}  M  \dot x_c^2 + \frac{1}{2} m_1(\ell_1^2\theta_1^2\cos(\theta_1)^2 + 2\ell_1\dot\theta_1\cos(\theta_1)\dot x_c + \dot x_c^2 + \dot y_1^2) + \frac{1}{2}m_2(...)\\
+            T = &\frac{1}{2}  M  \dot x_c^2 + \frac{1}{2} m_1(...) + \frac{1}{2}m_2\left((\ell_1 \dot \theta_1 \cos(\theta_1) + \dot x_c + \ell_2 \dot \theta_2\cos(\theta_2))^2 + \dot y_2^2\right)\\
+            T = &\frac{1}{2}  M  \dot x_c^2 + \frac{1}{2} m_1(\ell_1^2\theta_1^2\cos(\theta_1)^2 + 2\ell_1\dot\theta_1\cos(\theta_1)\dot x_c + \dot x_c^2 + \dot y_1^2)\\
+            +&  \frac{1}{2}  m_2 \left((\ell_1^2\dot\theta_1^2\cos(\theta_1)^2 + 2\ell_1\dot\theta_1\cos(\theta_2)\dot x_c + 2\ell_1\ell_2\dot\theta_1\dot\theta_2\cos(\theta_1)\cos(\theta_2)\dot x_c^2 + 2\dot x_c \ell_2 \dot \theta_2 \cos(\theta_2) + \ell_2^2\dot\theta_2^2\cos(\theta_2)^2) + \dot y_2^2\right)\\ 
+            T = &\frac{1}{2}  M  \dot x_c^2 + \frac{1}{2} (m_1 + m_2)(\ell_1^2\theta_1^2\cos(\theta_1)^2 + 2\ell_1\dot\theta_1\cos(\theta_1)\dot x_c)\\
+            &+  \frac{1}{2} m_1(\dot x_c^2 + \dot y_1^2) + m_2 \left((2\ell_1\ell_2\dot\theta_1\dot\theta_2\cos(\theta_1)\cos(\theta_2)\dot x_c^2 + 2\dot x_c \ell_2 \dot \theta_2 \cos(\theta_2) + \ell_2^2\dot\theta_2^2\cos(\theta_2)^2) + \dot y_2^2\right)\\
+            T = &\frac{1}{2}  (M + m_1)  \dot x_c^2 + \frac{1}{2} (m_1 + m_2)(\ell_1^2\theta_1^2\cos(\theta_1)^2 + 2\ell_1\dot\theta_1\cos(\theta_1)\dot x_c)\\
+            &+  \frac{1}{2} m_1\dot y_1^2 + m_2 \left((2\ell_1\ell_2\dot\theta_1\dot\theta_2\cos(\theta_1)\cos(\theta_2)\dot x_c^2 + 2\dot x_c \ell_2 \dot \theta_2 \cos(\theta_2) + \ell_2^2\dot\theta_2^2\cos(\theta_2)^2) + \dot y_2^2\right)\\
         \end{aligned}
     \end{equation}
 
@@ -79,9 +78,7 @@
 
     \begin{equation} \label{eq:potential}
         \begin{aligned}
-        V &= m_1g(y_1) + m_2g(y_2)     \\
-        V &= -m_1g\ell_1\cos(\theta_1) - m_2g(\ell_1\cos(\theta_1) +\ell_2\cos(\theta_2))\\
-        V &= -(m_1+m_2)g\ell_1\cos(\theta_1) - m_2g\ell_2\cos(\theta_2)
+        V &= m_1g(y_1) + m_2g(y_2)  \\
         \end{aligned}
     \end{equation}
     
@@ -90,10 +87,9 @@
     
     \begin{equation} \label{eq:lagrangian_full}
         \begin{aligned}
-            \mathcal{L} = & \frac{1}{2}(M + m_1) \dot x_c^2 \\
-            & + \frac{1}{2}(m_1 + m_2)\ell_1^2\dot\theta_1^2 \\
-            & + \frac{1}{2} m_2 \left(2\ell_1\ell_2 \dot\theta_1 \dot\theta_2 \cos(\theta_1 - \theta_2) + \ell_2^2\dot\theta_2^2 + 2\dot x_c(\ell_1 \dot \theta_1 \cos(\theta_1) + \ell_2 \dot \theta_2 \cos(\theta_2))\right) \\
-            & + (m_1 + m_2)g\ell_1\cos(\theta_1) + m_2g\ell_2\cos(\theta_2)
+            \mathcal{L} = &\frac{1}{2}  (M + m_1)  \dot x_c^2 + \frac{1}{2} (m_1 + m_2)(\ell_1^2\theta_1^2\cos(\theta_1)^2 + 2\ell_1\dot\theta_1\cos(\theta_1)\dot x_c)\\
+            &+  \frac{1}{2} m_1\dot y_1^2 + m_2 \left((2\ell_1\ell_2\dot\theta_1\dot\theta_2\cos(\theta_1)\cos(\theta_2)\dot x_c^2 + 2\dot x_c \ell_2 \dot \theta_2 \cos(\theta_2) + \ell_2^2\dot\theta_2^2\cos(\theta_2)^2) + \dot y_2^2\right)\\
+            & -m_1gy_1 - m_2gy_2
         \end{aligned}
     \end{equation}
     
@@ -261,245 +257,9 @@
     With the differential equation solved for $\ddot \theta_1$:
     \begin{equation}
         \begin{aligned}
-            \frac{m_2\ell_1\ddot\theta_1\cos(\theta_1) - m_2\ell_1\dot\theta_1^2\sin(\theta_1) + m_2\ell_2\ddot\theta_2\cos(\theta_2) - m_2\ell_2\dot\theta_2^2\cos(\theta_2)}{-M+m_1} = \ddot x_c
+            frac{m_2\ell_1\ddot\theta_1\cos(\theta_1) - m_2\ell_1\dot\theta_1^2\sin(\theta_1) + m_2\ell_2\ddot\theta_2\cos(\theta_2) - m_2\ell_2\dot\theta_2^2\cos(\theta_2)}{-M+m_1} = \ddot x_c
         \end{aligned}
     \end{equation}  
 
 
-
-
-    \pagebreak
-    \section{Liniearize using small angle approxiomation for: $\ddot x_c, \ddot \theta_1, \ddot \theta_2$}
-
-    \begin{equation}
-        \begin{aligned}
-            &(M+m_1)\ddot x_c + m_2\ell_1\ddot\theta_1 - m_2\ell_2\ddot\theta_2\    = F
-        \end{aligned}   
-    \end{equation}
-
-    \begin{equation}
-        \begin{aligned}
-            \ell_2\ddot \theta_2 + \ell_1  \ddot \theta_1 -  \ddot x_c +g\theta_2 = 0\\
-        \end{aligned}   
-    \end{equation}
-    
-    \begin{equation}
-        \begin{aligned}
-            (m_1 + m_2)\ell_1\ddot \theta_1 + m_2\ell_2\ddot\theta_2
-            +   m_2\ddot x_c + (m_1 + m_2)g\theta_1 = 0 
-        \end{aligned}   
-    \end{equation}
-
-
-    Or in matrix form:
-    \begin{equation}
-        \begin{bmatrix}
-            (M+m_1) & m_2\ell_1         & -m_2\ell_2\\
-            -1      & \ell_2            &  \ell_2\\
-            m_2     & (m_1+m_2)\ell_1   & m_2\ell_2
-        \end{bmatrix}
-        \begin{bmatrix}
-            \ddot x_c\\
-            \ddot \theta_1\\
-            \ddot \theta_2\\
-        \end{bmatrix}
-        +
-        \begin{bmatrix}
-            0&0&0\\
-            0&0&0\\
-            0&(m_1 +m_2)g& g
-        \end{bmatrix}
-        \begin{bmatrix}
-            x_c\\
-            \theta_1\\
-            \theta_2
-        \end{bmatrix}
-        =
-        \begin{bmatrix}
-            F\\
-            0\\
-            0
-        \end{bmatrix}
-    \end{equation}
-
-    With state vector equalling:
-    \begin{equation}
-        X=
-        \begin{bmatrix}
-            x_c\\
-            \theta_1\\
-            \theta_2\\
-            \dot x_c\\
-            \dot \theta_1\\
-            \dot \theta_2
-        \end{bmatrix}   
-        \qquad\text{or}\qquad\dot X=
-        \begin{bmatrix}
-            \dot x_c\\
-            \dot \theta_1\\
-            \dot \theta_2\\
-            \ddot x_c\\
-            \ddot \theta_1\\
-            \ddot \theta_2
-        \end{bmatrix}   
-    \end{equation}
-
-    Now write the second-order into the first-order form: $M \dot X + NX = F$:
-
-    \begin{equation}
-        \resizebox{.9\textwidth}{!}{$
-        M=
-        \begin{bmatrix}
-            1&0&0&0&0&0\\
-            0&1&0&0&0&0\\
-            0&0&1&0&0&0\\
-            0&0&0&(M+m_1) & m_2\ell_1         & -m_2\ell_2\\
-            0&0&0&-1      & \ell_2            &  \ell_2\\
-            0&0&0&m_2     & (m_1+m_2)\ell_1   & m_2\ell_2
-        \end{bmatrix}
-        ,N =
-        \begin{bmatrix}
-            0&0&0&1&0&0\\
-            0&0&0&0&1&0\\
-            0&0&0&0&0&1\\
-            0&0&0&0&0&0\\
-            0&0&0&0&0&0\\
-            0&(m_1 +m_2)g& g &0&0&0
-        \end{bmatrix}
-        ,F=
-        \begin{bmatrix}
-            0\\
-            0\\
-            0\\
-            1\\
-            0\\
-            0\\
-        \end{bmatrix}$}
-    \end{equation}
-
-    Using the following formula for calculating the A and B matrix for the state space:
-    \begin{equation}
-        A = M^{-1}N, B = M^{-1}F (\text{voeg bron in}) 
-    \end{equation}
-    Resulting in the following matrices:
-
-
-    \begin{equation*}
-        \resizebox{\textwidth}{!}{$
-        A = 
-        \begin{bmatrix}
-            0 & 0 & 0 & 1 & 0 & 0 \\
-            0 & 0 & 0 & 0 & 1 & 0 \\
-            0 & 0 & 0 & 0 & 0 & 1 \\
-            0 & \frac{g(m_1 + m_2)(-l_1m_2 - l_2m_2)}{Ml_1m_1 + Ml_1m_2 - Ml_2m_2 + l_1m_1^2 - 3l_1m_2^2 - l_2m_1m_2 - l_2m_2^2} & \frac{g(-l_1m_2 - l_2m_2)}{Ml_1m_1 + Ml_1m_2 - Ml_2m_2 + l_1m_1^2 - 3l_1m_2^2 - l_2m_1m_2 - l_2m_2^2} & 0 & 0 & 0 \\
-            0 & \frac{g(m_1 + m_2)(M + m_1 - m_2)}{Ml_1m_1 + Ml_1m_2 - Ml_2m_2 + l_1m_1^2 - 3l_1m_2^2 - l_2m_1m_2 - l_2m_2^2} & \frac{g(M + m_1 - m_2)}{Ml_1m_1 + Ml_1m_2 - Ml_2m_2 + l_1m_1^2 - 3l_1m_2^2 - l_2m_1m_2 - l_2m_2^2} & 0 & 0 & 0 \\
-            0 & \frac{g(m_1 + m_2)(-Ml_2 - l_1m_2 - l_2m_1)}{Ml_1l_2m_1 + Ml_1l_2m_2 - Ml_2^2m_2 + l_1l_2m_1^2 - 3l_1l_2m_2^2 - l_2^2m_1m_2 - l_2^2m_2^2} & \frac{g(-Ml_2 - l_1m_2 - l_2m_1)}{Ml_1l_2m_1 + Ml_1l_2m_2 - Ml_2^2m_2 + l_1l_2m_1^2 - 3l_1l_2m_2^2 - l_2^2m_1m_2 - l_2^2m_2^2} & 0 & 0 & 0
-        \end{bmatrix}$}
-    \end{equation*}
-    
-    \begin{equation*}
-        B = 
-        \begin{bmatrix}
-            0 \\
-            0 \\
-            0 \\
-            \frac{l_1 m_1 + l_1 m_2 - l_2 m_2}{Ml_1m_1 + Ml_1m_2 - Ml_2m_2 + l_1m_1^2 - 3l_1m_2^2 - l_2m_1m_2 - l_2m_2^2} \\
-            -\frac{2m_2}{Ml_1m_1 + Ml_1m_2 - Ml_2m_2 + l_1m_1^2 - 3l_1m_2^2 - l_2m_1m_2 - l_2m_2^2} \\
-            \frac{l_1m_1 + l_1m_2 + l_2m_2}{Ml_1l_2m_1 + Ml_1l_2m_2 - Ml_2^2m_2 + l_1l_2m_1^2 - 3l_1l_2m_2^2 - l_2^2m_1m_2 - l_2^2m_2^2} \\
-        \end{bmatrix}
-    \end{equation*}
-
-
-
 \end{document}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-   % \begin{equation}
-    %     \begin{aligned}
-    %         x_1 = x_c               \qquad \dot x_1 =...\\
-    %         x_2 = \dot x_c          \qquad \dot x_2 =...\\
-    %         x_3 = \theta_1          \qquad \dot x_3 =...\\
-    %         x_4 = \dot \theta_1     \qquad \dot x_4 =...\\
-    %         x_5 = \theta_2          \qquad \dot x_5 =...\\
-    %         x_6 = \dot \theta_2     \qquad \dot x_6 =...\\      
-    %     \end{aligned}
-    % \end{equation}
-
-    % \begin{equation}
-    %     \begin{bmatrix}
-    %         \dot x_1\\
-    %         \dot x_2\\
-    %         \dot x_3\\
-    %         \dot x_4\\
-    %         \dot x_5\\
-    %         \dot x_6\\
-    %     \end{bmatrix}
-    %     =
-    %     \begin{bmatrix}
-    %         0&1&0&0&0&0\\
-    %         0&0&0&\frac{-m_2\ell_1}{M+m_1}&0&\frac{m_2\ell_2}{M+m_1}\\
-    %         0&0&0&1&0&0\\
-    %         0&\frac{-m_2}{(m_1+m_2)\ell_1}&\frac{g}{\ell_1}&0&0&\frac{-m_2\ell_1}{(m_1+m_2)\ell_1}\\
-    %         0&0&0&0&0&1\\
-    %         0&\frac{1}{\ell_2}&0&\frac{-\ell_1}{\ell_2}&\frac{-g}{\ell_2}&0
-    %     \end{bmatrix}
-    %     \begin{bmatrix}
-    %         x_1\\
-    %         x_2\\
-    %         x_3\\
-    %         x_4\\
-    %         x_5\\
-    %         x_6
-    %     \end{bmatrix}
-    %     +
-    %     \begin{bmatrix}
-    %         0\\
-    %         \frac{1}{M+m_1}\\
-    %         0\\
-    %         0\\
-    %         0\\
-    %         0\\
-    %     \end{bmatrix}
-    %     F
-    % \end{equation}
-    
-    % \begin{equation}
-    %     \begin{aligned}
-    %         &\frac{m_2\ell_1 m_2\ell_2\ddot\theta_2 + m_2\ddot x_c + (m_1 + m_2)g\theta_1 - m_2\ell_2\ell_1  \ddot \theta_1 -  \ddot x_c +g\theta_2 - m_2\ell_2\dot\theta_2^2}{-M+m_1*(-(m_1 + m_2)\ell_1) * (-\ell_2)} = \ddot x_c
-    %     \end{aligned}   
-    % \end{equation}  
-
-    
-
-    % Or in a second-order derivative matrix form: $\ddot X$ = A$\dot X$ + B$X$, where:
-    % \begin{equation}
-    %     X=
-    %     \begin{bmatrix}
-    %         x_c\\
-    %         \theta_1\\
-    %         \theta_2\\
-    %         \dot x_c\\
-    %         \dot \theta_1\\
-    %         \dot \theta_2
-    %     \end{bmatrix}         
-    % \end{equation}
