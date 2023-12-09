@@ -141,9 +141,113 @@ class PhysicsDoublePendulum:
         return self.theta1, self.theta2, self.x
 
 
+class PhysicsDoublePendulumCart(PhysicsBase):
+    def __init__(self) -> None:
+        self.m1 = 0
+        self.m2 = 0
+        self.M = 0
+        self.l1 = 0
+        self.l2 = 0
+        self.g = -9.81
 
-           
+        self.x_min = 0
+        self.x_max = 0
+        
+        return
+
+    def init(self) -> None:
+        m1 = self.m1
+        m2 = self.m2
+        M = self.M
+        l1 = self.l1
+        l2 = self.l2
+        g = self.g
+
+        num1 = \
+        + M*l1*m1 
+        + M*l2*m2 
+        - M*l2*m2 
+        + l1*(m2**2) 
+        - 3*l1*(m2**2) 
+        - l2*m1*m2 
+        -l2*(m2**2) 
+
+        num2 = \
+        + M*l1*l2*m1
+        + M*l1*l2*m2
+        - M*(l2**2)*m2
+        + l1*l2*(m1**2)
+        - 3*l1*l2*(m2**2)
+        - (l2**2)*m1*m2
+        - (l2**2)*(m2**2)
+
+        self.A = np.array(
+            [[0, 0, 0, 1, 0, 0],
+            [0, 0, 0, 0, 1, 0],
+            [0, 0, 0, 0, 0, 1],
+            [0, (g*(m1 + m2)*(-l1*m2-l2*m2))/num1, (g*(-l1*m2-l2*m2))/num1, 0, 0, 0],
+            [0, (g*(m1+m2)*(M+m1-m2))/num1, (g*(M+m1-m2))/num1, 0, 0, 0],
+            [0, (g*(m1+m2)*(-M*l2-l1*m2-(l2**2)*m1))/num2, (g*(-M*l2-l1*m2-l2*m1))/num2, 0, 0, 0]]
+        )
+
+        self.B = np.array(
+            [[0],
+            [0],
+            [0],
+            [(l1*m1+l1*m2-l2*m2)/num1],
+            [-(2*m2)/num1],
+            [(l1*m1+l1*m2-l2*m2)/num2]]
+        )
+
+        self.C = np.array(
+            [[1, 0, 0, 0, 0, 0],
+            [0, 1, 0, 0, 0, 0],
+            [0, 0, 1, 0, 0, 0]]
+        )
+
+        self.D = np.array(
+            [[0],
+            [0],
+            [0]]
+        )
+        
+        #TODO: Abstract this
+        self.X0 = np.array(
+            [[0.0],
+             [0.0],
+             [0.0],
+             [0.0],
+             [0.0],
+             [0.0]]
+        )
+        self.X = self.X0
+        return
+
+    def step(self, U, dt):
+        # X and X_d
+        X_d = self.A@self.X + self.B@U
+        
+        # Scuffed friction
+        X_d[4][0] -= X_d[1][0]*100
+        X_d[5][0] -= X_d[2][0]*100
+        
+
+        self.X += X_d * dt
+
+        # Limits
+        if(self.X[0][0] > self.x_max):
+            self.X[0][0] = self.x_max
+        if(self.X[0][0] < self.x_min):
+            self.X[0][0] = self.x_min
+
+        # Outputs
+        # Y = self.C@self.X + self.D@0
+        Y = self.C@self.X
+        return Y
     
+    def set_limit(self, x_offset) -> None:
+        self.x_min = -x_offset
+        self.x_max = x_offset
     
     
     

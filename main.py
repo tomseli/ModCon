@@ -35,9 +35,7 @@ text_enabled = font.render('Control Enabled', True, GREEN)
 text_disabled = font.render('Control Disabled', True, RED)
 
 ## Physics ##
-cart = physics.PhysicsCart()
-pendulum = physics.PhysicsDoublePendulum(cart)
-cart.addPendulum(pendulum)
+pendulum = physics.PhysicsDoublePendulumCart()
 control = controller.ControlLQR(pendulum)
 
 ## Sim variables ##
@@ -45,35 +43,30 @@ control = controller.ControlLQR(pendulum)
 enable_control = True
 disturb = 0
 
-pendulum.theta1 = 0
-pendulum.theta2 = 0
-
 # Time
 dt = 0
 
 # Properties
 pendulum.l1 = 0.2
 pendulum.m1 = 0.1
-pendulum.cf = pendulum.m1/20.1428571428571428571428571428571
+# pendulum.cf = pendulum.m1/20.1428571428571428571428571428571
 
 
 pendulum.l2  = 0.2
 pendulum.m2  = 0.1
-pendulum.cf2 = pendulum.m2/20.1428571428571428571428571428571
-
-cart.m = 100
-cart.cf = 5
-cart.x = 0.0
+# pendulum.cf2 = pendulum.m2/20.1428571428571428571428571428571
+pendulum.M = 2
 
 f = 0
 
-cart.set_limit(CART_SPACE)
+pendulum.set_limit(CART_SPACE)
+pendulum.init()
 
 # Space
 coordinates = list(MIDDLE)
 
 # Control
-control.M = cart.m
+control.M = pendulum.M
 control.m1 = pendulum.m1
 control.m2 = pendulum.m2
 control.l1 = pendulum.l1
@@ -85,7 +78,6 @@ rect_w = 50
 rect_h = 25
 
 running = True
-theta1, theta2, x = pendulum.step(dt)
 while running:
     ## Inputs ##
     for event in pygame.event.get():
@@ -106,12 +98,20 @@ while running:
 #         if(theta > 3.14 + 0.5 or theta < 3.14 - 0.5):
 #             running = False
 # =============================================================================
-        f = control.control() + disturb
+        # f = control.control() + disturb
+        f = 0 + disturb
     else:
         f = 0 + disturb
+
+    U = np.array(
+        [[0+disturb]]
+    )
     disturb = 0
-    cart.f = f
-    theta1, theta2, x = pendulum.step(dt)
+
+    Y = pendulum.step(U, dt)
+    x = Y[0][0]
+    theta1 = Y[1][0]
+    theta2 = Y[2][0]
 
     ## Rendering ## 
     # Background
@@ -149,6 +149,6 @@ while running:
     pygame.display.flip()
 
     # Time keeping
-    dt = clock.tick(480)/2000
+    dt = clock.tick(480)/1000
 
 pygame.quit()
