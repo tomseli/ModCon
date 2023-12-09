@@ -107,7 +107,6 @@ while running:
 #             running = False
 # =============================================================================
         f = control.control() + disturb
-        print(control.control())
     else:
         f = 0 + disturb
     disturb = 0
