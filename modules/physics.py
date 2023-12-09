@@ -33,10 +33,10 @@ class PhysicsCart(PhysicsBase):
         return None
     
     def step(self, dt : float, k4_theta1_dd, k4_theta2_dd) -> float:
-        term1 = self.pendulum.m2 * self.pendulum.l1     * k4_theta1_dd                  * np.cos(self.pendulum.theta1)
-        term2 = -self.pendulum.m2 * self.pendulum.l1    * self.pendulum.theta1_d**2     * np.sin(self.pendulum.theta1)
-        term3 = self.pendulum.m2 * self.pendulum.l2     * k4_theta2_dd                  * np.cos(self.pendulum.theta2)
-        term4 = -self.pendulum.m2 * self.pendulum.l2    * self.pendulum.theta2_d**2     * np.sin(self.pendulum.theta2)
+        term1 = -self.pendulum.m2 * self.pendulum.l1     * k4_theta1_dd                  * np.cos(self.pendulum.theta1)
+        term2 = self.pendulum.m2 * self.pendulum.l1    * self.pendulum.theta1_d**2     * np.sin(self.pendulum.theta1)
+        term3 = -self.pendulum.m2 * self.pendulum.l2     * k4_theta2_dd                  * np.cos(self.pendulum.theta2)
+        term4 = self.pendulum.m2 * self.pendulum.l2    * self.pendulum.theta2_d**2     * np.sin(self.pendulum.theta2)
         
         self.x_dd = (term1 + term2 + term3 + term4) / -(self.m + self.pendulum.m1) \
             + self.f - self.x_d * self.cf 
