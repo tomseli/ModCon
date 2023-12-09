@@ -1,6 +1,6 @@
 from matplotlib import pyplot as plt
 import numpy as np
-import lowpass
+from modules import lowpass
 
 class Control():
     def __init__(self) -> None:
