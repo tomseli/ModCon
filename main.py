@@ -10,13 +10,13 @@ from modules import controller
 
 ## Defines ##
 # Simulation defines
-CART_SPACE = 0.35
+CART_SPACE = 2
 
 # Rendering defines
 HEIGHT = 500
 WIDTH = 1000
 MIDDLE = (WIDTH/2, HEIGHT/2)
-SCALE = 500
+SCALE = 200
 
 WHITE = (255, 255, 255)
 RED = (255, 0, 0)
@@ -35,7 +35,9 @@ text_enabled = font.render('Control Enabled', True, GREEN)
 text_disabled = font.render('Control Disabled', True, RED)
 
 ## Physics ##
-pendulum = physics.PhysicsDoublePendulumCart()
+cart = physics.PhysicsCart()
+pendulum = physics.PhysicsDoublePendulum(cart)
+cart.addPendulum(pendulum)
 control = controller.ControlLQR(pendulum)
 
 ## Sim variables ##
@@ -47,20 +49,21 @@ disturb = 0
 dt = 0
 
 # Properties
-pendulum.l1 = 0.2
-pendulum.m1 = 0.1
-# pendulum.cf = pendulum.m1/20.1428571428571428571428571428571
+pendulum.l1 = 0.4
+pendulum.m1 = 0.2
+pendulum.cf = 0#pendulum.m1/20.1428571428571428571428571428571
 
 
-pendulum.l2  = 0.2
-pendulum.m2  = 0.1
-# pendulum.cf2 = pendulum.m2/20.1428571428571428571428571428571
-pendulum.M = 2
+pendulum.l2  = 0.4
+pendulum.m2  = 0.2
+pendulum.cf2 = 0#pendulum.m2/20.1428571428571428571428571428571
+cart.m = 1
+pendulum.M = cart.m
 
 f = 0
-
-pendulum.set_limit(CART_SPACE)
-pendulum.init()
+cart.set_limit(CART_SPACE)
+# pendulum.set_limit(CART_SPACE)
+# pendulum.init()
 
 # Space
 coordinates = list(MIDDLE)
@@ -85,9 +88,9 @@ while running:
             running = False
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
-                disturb = -10
+                disturb = -200
             if event.key == pygame.K_RIGHT:
-                disturb = 10
+                disturb = 200
             if event.key == pygame.K_DOWN:
                 enable_control = False
     
@@ -98,20 +101,22 @@ while running:
 #         if(theta > 3.14 + 0.5 or theta < 3.14 - 0.5):
 #             running = False
 # =============================================================================
-        # f = control.control() + disturb
-        f = 0 + disturb
+        f = control.control()
+        if(f>40):
+            f=40
+        elif(f<-40):
+            f=-40 
+        f += disturb       
+        print(f, disturb, f-disturb)
     else:
         f = 0 + disturb
+    disturb = 0    
 
-    U = np.array(
-        [[0+disturb]]
-    )
-    disturb = 0
-
-    Y = pendulum.step(U, dt)
-    x = Y[0][0]
-    theta1 = Y[1][0]
-    theta2 = Y[2][0]
+    cart.f = f
+    theta1, theta2, x = pendulum.step(dt)
+    if((theta1 > math.pi/2) or (theta1 < -math.pi/2)):
+        enable_control = False
+    f = 0
 
     ## Rendering ## 
     # Background
@@ -149,6 +154,6 @@ while running:
     pygame.display.flip()
 
     # Time keeping
-    dt = clock.tick(480)/1000
+    dt = clock.tick(480)/5000
 
 pygame.quit()

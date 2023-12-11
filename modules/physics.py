@@ -13,8 +13,8 @@ class PhysicsBase():
 class PhysicsCart(PhysicsBase):
     def __init__(self) -> None:
         # Properties
-        self.m = 1
-        self.cf = 1
+        self.m = 0
+        self.cf = 0
 
         # Motion
         self.x_dd = 0
@@ -32,16 +32,16 @@ class PhysicsCart(PhysicsBase):
         self.pendulum = pendulum
         return None
     
-    def step(self, dt : float, k4_theta1_dd, k4_theta2_dd) -> float:
-        term1 = -self.pendulum.m2 * self.pendulum.l1     * k4_theta1_dd                  * np.cos(self.pendulum.theta1)
-        term2 = self.pendulum.m2 * self.pendulum.l1    * self.pendulum.theta1_d**2     * np.sin(self.pendulum.theta1)
-        term3 = -self.pendulum.m2 * self.pendulum.l2     * k4_theta2_dd                  * np.cos(self.pendulum.theta2)
-        term4 = self.pendulum.m2 * self.pendulum.l2    * self.pendulum.theta2_d**2     * np.sin(self.pendulum.theta2)
+    def step(self, dt: float, k4_theta1_dd, k4_theta2_dd) -> float:
+        term1 = (self.pendulum.m1 + self.pendulum.m2) * self.pendulum.l1 * k4_theta1_dd * math.cos(self.pendulum.theta1)
+        term2 = -(self.pendulum.m1 + self.pendulum.m2) * self.pendulum.l1 * self.pendulum.theta1_d**2 * math.sin(self.pendulum.theta1)
+        term3 = self.pendulum.m2 * self.pendulum.l2 * k4_theta2_dd * math.cos(self.pendulum.theta2)
+        term4 = -self.pendulum.m2 * self.pendulum.l2 * self.pendulum.theta2_d**2 * math.sin(self.pendulum.theta2)
         
-        self.x_dd = (term1 + term2 + term3 + term4) / -(self.m + self.pendulum.m1) \
-            + self.f - self.x_d * self.cf 
+        self.x_dd = (term1 + term2 + term3 + term4) / -(self.pendulum.m1 + self.pendulum.m2 + self.m) \
+            + self.f - self.x_d * self.cf
         self.x_d = self.x_d + self.x_dd * dt
-        self.x = self.x + self.x_d * dt
+        self.x = self.x + self.x_d * dt * 20
 
         if(self.x > self.x_max or self.x < self.x_min):
             self.x_dd = 0
@@ -53,31 +53,98 @@ class PhysicsCart(PhysicsBase):
         
         return self.x
     
+
+        # # Runge-Kutta coefficients
+        # a1 = 1 / 6
+        # a2 = 1 / 3 
+        # a3 = 1 / 3
+        # a4 = 1 / 6
+
+        # # Compute intermediate values
+        # k1 = self.compute_derivative(k4_theta1_dd, k4_theta2_dd)
+        # k2 = self.compute_derivative(k4_theta1_dd + dt * k1, k4_theta2_dd)
+        # k3 = self.compute_derivative(k4_theta1_dd + dt * k2, k4_theta2_dd)
+        # k4 = self.compute_derivative(k4_theta1_dd + dt * k3, k4_theta2_dd)
+
+        # # Update state variables using Runge-Kutta formula
+        # self.x_dd = ((a1 * k1 + a2 * k2 + a3 * k3 + a4 * k4) / -(self.m + self.pendulum.m1 + self.pendulum.m2)) * (self.f / self.m)#- (self.x_d * self.cf)
+        # self.x_d = self.x_d + self.x_dd * dt
+        # self.x = self.x + self.x_d * dt
+
+
+        # # Check boundaries and reset if necessary
+        # if self.x > self.x_max or self.x < self.x_min:
+        #     self.x_dd = 0
+        #     self.x_d = 0
+        # if self.x > self.x_max:
+        #     self.x = self.x_max
+        # if self.x < self.x_min:
+        #     self.x = self.x_min
+
+        # return self.x    
+
+    # def compute_derivative(self, k4_theta1_dd, k4_theta2_dd):
+    #     term1 = (self.pendulum.m1 + self.pendulum.m2) * self.pendulum.l1 * k4_theta1_dd * math.cos(self.pendulum.theta1)
+    #     term2 = -(self.pendulum.m1 + self.pendulum.m2) * self.pendulum.l1 * self.pendulum.theta1_d**2 * math.sin(self.pendulum.theta1)
+    #     term3 = self.pendulum.m2 * self.pendulum.l2 * k4_theta2_dd * math.cos(self.pendulum.theta2)
+    #     term4 = -self.pendulum.m2 * self.pendulum.l2 * self.pendulum.theta2_d**2 * math.sin(self.pendulum.theta2)
+    #     print(term1 + term2 + term3 + term4)
+
+    #     return term1 + term2 + term3 + term4
+
+    
     def set_limit(self, x_offset) -> None:
         self.x_min = -x_offset
         self.x_max = x_offset
         
         
+
 class PhysicsDoublePendulum:
     def __init__(self, cart : PhysicsCart):
         self.cart = cart
         
         self.x = 0
+        self.xc_d = self.cart.x_d
+        self.M = 0
         self.m1 = 0
         self.m2 = 0
         self.l1 = 0
         self.l2 = 0
-        self.g = -9.81
+        self.g = 9.81
         self.theta1 = 0
-        self.theta2 = 0
+        self.theta2 = 0 + math.pi/16
         self.theta1_d = 0
         self.theta2_d = 0
+
+
+
+    def calculate_total_energy(self):
+        M = self.cart.m
+        m1 = self.m1
+        m2 = self.m2
+        l1 = self.l1
+        l2 = self.l2
+        g = self.g
+
+        # Kinetic energy
+        T = 0.5 * ((M + m1) * self.cart.x_d**2 +
+                   (m1 + m2) * l1 * self.theta1_d**2 +
+                   m2 * l2 * self.theta2_d**2 +
+                   2 * self.cart.x_d * (l1 * self.theta1_d * math.cos(self.theta1) + l2 * self.theta2_d * math.cos(self.theta2)))
+
+        # Potential energy
+        U = (m1 + m2) * g * l1 * math.cos(self.theta1) + m2 * g * l2 * math.cos(self.theta2)
+
+        # Total energy
+        E = T - U
+
+        return E
 
     def calculate_theta1_dd(self, k_theta2_dd):
         term1 = self.m2 * self.l2 * k_theta2_dd * math.cos(self.theta1 - self.theta2)
         term2 = self.m2 * self.l2 * self.theta2_d ** 2 * math.sin(self.theta1 - self.theta2)
-        term3 = -self.m2 * self.cart.x_dd * math.cos(self.theta1)
-        term4 = (self.m1 + self.m2) *self.g  *  math.sin(self.theta1)
+        term3 = (self.m2 + self.m2) * self.cart.x_dd * math.cos(self.theta1)
+        term4 = -(self.m1 + self.m2) *self.g  *  math.sin(self.theta1)
         term5 = self.cf * self.theta1_d
     
         denominator = -(self.m1 + self.m2) * self.l1
@@ -86,14 +153,15 @@ class PhysicsDoublePendulum:
     def calculate_theta2_dd(self, k_theta1_dd):
         term1 = self.m2*self.l1*k_theta1_dd*math.cos(self.theta1-self.theta2)
         term2 = -(self.m2*self.l1*self.theta1_d**2*math.sin(self.theta1-self.theta2))
-        term3 = -(self.m2 * self.cart.x_dd * math.cos(self.theta2))
-        term4 = self.m2*self.g*math.sin(self.theta2)
+        term3 = (self.m2 * self.cart.x_dd * math.cos(self.theta2))
+        term4 = -self.m2*self.g*math.sin(self.theta2)
         term5 = self.cf2 * self.theta2_d
         
         denominator = -self.m2*self.l2
         return (term1 + term2 + term3 + term4 + term5) / denominator
 
     def step(self, dt):   
+        self.xc_d = self.cart.x_d
         k1_theta1_d = self.theta1_d
         k1_theta2_d = self.theta2_d
         k1_theta1_dd = self.calculate_theta1_dd(0)  # Pass 0 for now, as k2_theta2_dd is not computed yet
@@ -148,7 +216,7 @@ class PhysicsDoublePendulumCart(PhysicsBase):
         self.M = 0
         self.l1 = 0
         self.l2 = 0
-        self.g = -9.81
+        self.g = 9.81
 
         self.x_min = 0
         self.x_max = 0
@@ -185,18 +253,18 @@ class PhysicsDoublePendulumCart(PhysicsBase):
             [[0, 0, 0, 1, 0, 0],
             [0, 0, 0, 0, 1, 0],
             [0, 0, 0, 0, 0, 1],
-            [0, (g*(m1 + m2)*(-l1*m2-l2*m2))/num1, (g*(-l1*m2-l2*m2))/num1, 0, 0, 0],
-            [0, (g*(m1+m2)*(M+m1-m2))/num1, (g*(M+m1-m2))/num1, 0, 0, 0],
-            [0, (g*(m1+m2)*(-M*l2-l1*m2-l2*m1))/num2, (g*(-M*l2-l1*m2-l2*m1))/num2, 0, 0, 0]]
+            [0, -g*(m1 + m2)/M, 0, 0, 0, 0],
+            [0, g*(M + m1)*(m1 + m2)/(M*l1*m1), -g*m2/(l1*m1), 0, 0, 0],
+            [0, -g*(m1 + m2)/(l2*m1), g*(m1 + m2)/(l2*m1), 0, 0, 0]]
         )
 
         self.B = np.array(
             [[0],
             [0],
             [0],
-            [(l1*m1+l1*m2-l2*m2)/num1],
-            [-(2*m2)/num1],
-            [(l1*m1+l1*m2-l2*m2)/num2]]
+            [1/M],
+            [-1/M*l1],
+            [0]]
         )
 
         self.C = np.array(

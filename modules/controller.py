@@ -4,6 +4,7 @@ from scipy.linalg import solve_continuous_are
 from modules import lowpass
 from modules import physics
 
+
 class ControlPID():
     def __init__(self) -> None:
         self.kp = 0
@@ -162,31 +163,32 @@ class ControlLQR():
             [[0, 0, 0, 1, 0, 0],
             [0, 0, 0, 0, 1, 0],
             [0, 0, 0, 0, 0, 1],
-            [0, (g*(m1 + m2)*(-l1*m2-l2*m2))/num1, (g*(-l1*m2-l2*m2))/num1, 0, 0, 0],
-            [0, (g*(m1+m2)*(M+m1-m2))/num1, (g*(M+m1-m2))/num1, 0, 0, 0],
-            [0, (g*(m1+m2)*(-M*l2-l1*m2-(l2**2)*m1))/num2, (g*(-M*l2-l1*m2-l2*m1))/num2, 0, 0, 0]]
+            [0, -g*(m1 + m2)/M, 0, 0, 0, 0],
+            [0, g*(M + m1)*(m1 + m2)/(M*l1*m1), -g*m2/(l1*m1), 0, 0, 0],
+            [0, -g*(m1 + m2)/(l2*m1), g*(m1 + m2)/(l2*m1), 0, 0, 0]]
         )
 
         self.B = np.array(
             [[0],
             [0],
             [0],
-            [(l1*m1+l1*m2-l2*m2)/num1],
-            [-(2*m2)/num1],
-            [(l1*m1+l1*m2-l2*m2)/num2]]
+            [1/M],
+            [-1/M*l1],
+            [0]]
         )
 
+
         self.R = np.array(
-            [[0.1]]
+            [[0.2]]
         )
         
         i = 1
         self.Q = np.array(
-            [[i, 0, 0, 0, 0, 0],
-             [0, i, 0, 0, 0, 0],
+            [[i+30, 0, 0, 0, 0, 0],
+             [0, i+10, 0, 0, 0, 0],
              [0, 0, i, 0, 0, 0],
-             [0, 0, 0, i, 0, 0],
-             [0, 0, 0, 0, i, 0],
+             [0, 0, 0, i+30, 0, 0],
+             [0, 0, 0, 0, i+10, 0],
              [0, 0, 0, 0, 0, i]]
         )
 
@@ -198,7 +200,7 @@ class ControlLQR():
         x1 = self.pendulum.x
         x2 = self.pendulum.theta1
         x3 = self.pendulum.theta2
-        x4 = self.pendulum.x
+        x4 = self.pendulum.xc_d
         x5 = self.pendulum.theta1_d
         x6 = self.pendulum.theta2_d
 
@@ -211,4 +213,4 @@ class ControlLQR():
              [x6]]
         )
 
-        return np.dot(self.K, X)[0][0]
+        return np.dot(-self.K, X)[0][0]
