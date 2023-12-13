@@ -64,17 +64,17 @@
             T = &\frac{1}{2}  M  \dot x_c^2 + \frac{1}{2}  m_1(\dot x_1^2 + \dot y_1^2) + \frac{1}{2}m_2(\dot x_2^2 + \dot y_2^2) \\
             T = &\frac{1}{2}  M  \dot x_c^2 + \frac{1}{2}  m_1\left((\ell_1 \dot \theta_1 \cos(\theta_1) + \dot x_c)^2 + (\ell_1 \dot \theta_1 \sin(\theta_1))^2\right) \\
             &+ \frac{1}{2}  m_2\left((\ell_1 \dot \theta_1 \cos(\theta_1) + \dot x_c + \ell_2 \dot \theta_2\cos(\theta_2))^2 + (\ell_1 \dot \theta_2 \sin(\theta_1) + \ell_2\dot\theta_2\sin(\theta_2))^2\right)\\
-            T = &\frac{1}{2} M\dot x_c^2 + \frac{1}{2}m_1(\ell_1^2\dot\theta_1^2 + \dot x_c^2 + \dot\theta_1^2\ell_1^2\sin(\theta_1)) + \frac{1}{2} m_2(...)\\
+            T = &\frac{1}{2} M\dot x_c^2 + \frac{1}{2}m_1(\dot x_c^2 + 2\ell_1\dot x_c \dot \theta_1 \cos(\theta_1) + \ell_1^2\dot\theta_1^2) + \frac{1}{2} m_2(...)\\
             T = &... + \frac{1}{2}m_2(\ell_1^2\dot\theta_1^2\cos(\theta_1)^2   \\
              &+ 2\ell_1\dot\theta_1\cos(\theta_2)\dot x_c + 2\ell_1\dot\theta_1\cos(\theta_1)\ell_2\dot\theta_2\cos(\theta_2)\\
              &+ \dot x_c^2 + 2\dot x_c \ell_2 \dot \theta_2 \cos(\theta_2) + \ell_2^2\dot\theta_2^2\cos(\theta_2)^2 \\
              &+\ell_1^2\dot\theta_1^2\sin(\theta_1)^2  +   2\ell_1\ell_2\dot\theta_1\dot\theta_2\sin(\theta_1)\sin(\theta_2) + \ell_2^2\dot\theta_2^2\sin(\theta_2)^2)\\
-             T = &... + \frac{1}{2}m_2(\ell_1^2\dot\theta_1^2 + 2\ell_1\ell_2\dot\theta_1\dot\theta_2\cos(\theta_1 - \theta_2) + \ell_2^2\dot\theta_2^2     +      2\dot x_c(\ell_1\dot\theta_1\cos(\theta_1) + \ell_2\dot\theta_2\cos(\theta_2)))\\
-             T = &\frac{1}{2}  (M + m_1)  \dot x_c^2 + \frac{1}{2}(m_1 + m_2)\ell_1^2\dot\theta_1^2\\
-                 &+ \frac{1}{2}m_2(2\ell_1\ell_2\dot\theta_1\dot\theta_2\cos(\theta_1 - \theta_2) + \ell_2^2\dot\theta_2^2     +      2\dot x_c(\ell_1\dot\theta_1\cos(\theta_1) + \ell_2\dot\theta_2\cos(\theta_2)))\\
+             T = &... + \frac{1}{2}m_2(\dot x_c^2 +\ell_1^2\dot\theta_1^2 + 2\ell_1\ell_2\dot\theta_1\dot\theta_2\cos(\theta_1 - \theta_2) + \ell_2^2\dot\theta_2^2     +      2\dot x_c(\ell_1\dot\theta_1\cos(\theta_1) + \ell_2\dot\theta_2\cos(\theta_2)))\\
+             T = &\frac{1}{2}  (M + m_1 + m_2)  \dot x_c^2 + \frac{1}{2}(m_1 + m_2)\ell_1^2\dot\theta_1^2+ \frac{1}{2}m_2\ell_2^2\dot\theta_2^2\\
+                 &+m_2\ell_1\ell_2\dot\theta_1\dot\theta_2\cos(\theta_1 - \theta_2)      +      (m_1 + m_2)\dot x_c\ell_1\dot\theta_1\cos(\theta_1) + m_2\dot x_c\ell_2\dot\theta_2\cos(\theta_2)\\
         \end{aligned}
     \end{equation}
-
+    % \frac{1}{2}
     Then, for $V$, the potential energy of the system
 
     \begin{equation} \label{eq:potential}
@@ -90,9 +90,8 @@
     
     \begin{equation} \label{eq:lagrangian_full}
         \begin{aligned}
-            \mathcal{L} = & \frac{1}{2}(M + m_1) \dot x_c^2 \\
-            & + \frac{1}{2}(m_1 + m_2)\ell_1^2\dot\theta_1^2 \\
-            & + \frac{1}{2} m_2 \left(2\ell_1\ell_2 \dot\theta_1 \dot\theta_2 \cos(\theta_1 - \theta_2) + \ell_2^2\dot\theta_2^2 + 2\dot x_c(\ell_1 \dot \theta_1 \cos(\theta_1) + \ell_2 \dot \theta_2 \cos(\theta_2))\right) \\
+            \mathcal{L} = &\frac{1}{2}  (M + m_1 + m_2)  \dot x_c^2 + \frac{1}{2}(m_1 + m_2)\ell_1^2\dot\theta_1^2+ \frac{1}{2}m_2\ell_2^2\dot\theta_2^2\\
+            &+m_2\ell_1\ell_2\dot\theta_1\dot\theta_2\cos(\theta_1 - \theta_2)      +      (m_1 + m_2)\dot x_c\ell_1\dot\theta_1\cos(\theta_1) + m_2\dot x_c\ell_2\dot\theta_2\cos(\theta_2)\\
             & + (m_1 + m_2)g\ell_1\cos(\theta_1) + m_2g\ell_2\cos(\theta_2)
         \end{aligned}
     \end{equation}
@@ -110,14 +109,14 @@
     Substituting (\ref{eq:lagrangian_full}) in equation (\ref{eq:lagrangian_eq}) and solving for $\theta_1$ gives:
     \begin{equation} \label{eq: lagrange Step1}
         \frac{\partial \mathcal{L}}{\partial \dot\theta_1} = 
-         (m_1 + m_2)\ell_1^2\dot\theta_1 + m_2\ell_1\ell_2\dot\theta_2\cos(\theta_1 - \theta_2) + m_2\dot x_c\ell_1\cos(\theta_1)
+         (m_1 + m_2)\ell_1^2\dot\theta_1 + m_2\ell_1\ell_2\dot\theta_2\cos(\theta_1 - \theta_2) + (m_1+m_2)\dot x_c\ell_1\cos(\theta_1)
     \end{equation}
 
     \begin{equation} \label{eq: lagrange Step2}
         \begin{aligned}
         \frac{d}{dt} \left(\frac{\partial \mathcal{L}}{\partial \dot\theta_1}\right) =& 
          (m_1 + m_2)\ell_1^2\ddot\theta_1   +   m_2\ell_1\ell_2\ddot\theta_2\cos(\theta_1 - \theta_2)  -m_2\ell_1\ell_2\dot\theta_2\sin(\theta_1-\theta_2)(\dot\theta_1 - \dot\theta_2) \\
-           & +   m_2\ddot x_c\ell_1\cos(\theta_1) - m_2 \dot x_c\ell_1\sin(\theta_1)\dot\theta_1
+           & +   (m_1 +m_2)\ddot x_c\ell_1\cos(\theta_1) -(m_1 + m_2) \dot x_c\ell_1\sin(\theta_1)\dot\theta_1
         \end{aligned}
     \end{equation}
 
@@ -126,7 +125,7 @@
         \frac{\partial \mathcal{L}}{\partial\theta_1} =
         -m_2\ell_1\ell_2\dot\theta_1\dot\theta_2\sin(\theta_1-\theta_2) 
         - (m_1 + m_2)g\ell_1\sin(\theta_1)
-        -m_2\dot x_c\ell_1\dot\theta_1\sin(\theta_1)
+        -(m_1 +m_2)\dot x_c\ell_1\dot\theta_1\sin(\theta_1)
     \end{equation}
 
     Which give the following differential equation:
@@ -134,8 +133,8 @@
     \begin{equation}
         \begin{aligned}
             &(m_1 + m_2)\ell_1^2\ddot\theta_1   +   m_2\ell_1\ell_2\ddot\theta_2\cos(\theta_1 - \theta_2)  -m_2\ell_1\ell_2\dot\theta_2\sin(\theta_1-\theta_2)(\dot\theta_1 - \dot\theta_2)\\
-            &+   m_2\ddot x_c\ell_1\cos(\theta_1) - m_2 \dot x_c\ell_1\sin(\theta_1)\dot\theta_1 + m_2\ell_1\ell_2\dot\theta_1\dot\theta_2\sin(\theta_1-\theta_2) \\ 
-            & + (m_1 + m_2)g\ell_1\sin(\theta_1) + m_2\dot x_c\ell_1\dot\theta_1\sin(\theta_1) = 0
+            &+   (m_1 + m_2)\ddot x_c\ell_1\cos(\theta_1) - (m_1 + m_2) \dot x_c\ell_1\sin(\theta_1)\dot\theta_1 + m_2\ell_1\ell_2\dot\theta_1\dot\theta_2\sin(\theta_1-\theta_2) \\ 
+            & + (m_1 + m_2)g\ell_1\sin(\theta_1) + (m_1 + m_2)\dot x_c\ell_1\dot\theta_1\sin(\theta_1) = 0
         \end{aligned}
     \end{equation}   
 
@@ -145,7 +144,7 @@
     \begin{equation}
         \begin{aligned}
             &(m_1 + m_2)\ell_1\ddot\theta_1   +   m_2\ell_2\ddot\theta_2\cos(\theta_1 - \theta_2)  +  m_2\ell_2\dot\theta_2^2\sin(\theta_1-\theta_2)\\
-            &+   m_2\ddot x_c\cos(\theta_1) + (m_1 + m_2)g\sin(\theta_1) = 0
+            &+   (m_1 + m_2)\ddot x_c\cos(\theta_1) + (m_1 + m_2)g\sin(\theta_1) = 0
         \end{aligned}
     \end{equation}  
 
@@ -153,7 +152,7 @@
     \begin{equation}
         \begin{aligned}
             \frac{m_2\ell_2\ddot\theta_2\cos(\theta_1 - \theta_2)  +m_2\ell_2\dot\theta_2^2\sin(\theta_1-\theta_2)
-            +   m_2\ddot x_c\cos(\theta_1) + (m_1 + m_2)g\sin(\theta_1)}{-(m_1 + m_2)\ell_1} = \ddot \theta_1
+            +   (m_1 + m_2)\ddot x_c\cos(\theta_1) + (m_1 + m_2)g\sin(\theta_1)}{-(m_1 + m_2)\ell_1} = \ddot \theta_1
         \end{aligned}
     \end{equation}  
     
@@ -236,32 +235,34 @@
     Substituting (\ref{eq:lagrangian_full}) in equation (\ref{eq:lagrangian_eq}) and solving for $\theta_1$ gives:
 
     \begin{equation} \label{eq: lagrange Step1}
-        \frac{\partial \mathcal{L}}{\partial \dot\theta_1} = (M + m_1)\dot x_c + m_2\ell_1\dot\theta_1\cos(\theta_1) + m_2\ell_2\dot\theta_2\cos(\theta_2)
+        \frac{\partial \mathcal{L}}{\partial \dot x_c} = (M + m_1 + m_2)\dot x_c + (m_1 + m_2)\ell_1\dot\theta_1\cos(\theta_1) + m_2\ell_2\dot\theta_2\cos(\theta_2)
     \end{equation}
 
     \begin{equation} \label{eq: lagrange Step2}
         \begin{aligned}
-        \frac{d}{dt} \left(\frac{\partial \mathcal{L}}{\partial \dot\theta_1}\right) &= (M + m_1)\ddot x_c + m_2\ell_1\ddot\theta_1\cos(\theta_1) - m_2\ell_1\dot\theta_1^2\sin(\theta_1) + m_2\ell_2\ddot\theta_2\cos(\theta_2) - m_2\ell_2\dot\theta_2^2\cos(\theta_2)
+        \frac{d}{dt} \left(\frac{\partial \mathcal{L}}{\partial \dot x_c}\right) &= (M + m_1 + m_2)\ddot x_c +  (m_1 + m_2)\ell_1\ddot\theta_1\cos(\theta_1)\\
+         &- (m_1 + m_2)\ell_1\dot\theta_1^2\sin(\theta_1) + m_2\ell_2\ddot\theta_2\cos(\theta_2) - m_2\ell_2\dot\theta_2^2\sin(\theta_2)
         \end{aligned}
     \end{equation}
 
     
     \begin{equation} \label{eq: lagrange Step3}
-        \frac{\partial \mathcal{L}}{\partial\theta_1} = 0
+        \frac{\partial \mathcal{L}}{\partial x_c} = 0
         \end{equation}
 
     Which give the following differential equation:
 
     \begin{equation}
         \begin{aligned}
-            (M + m_1)\ddot x_c + m_2\ell_1\ddot\theta_1\cos(\theta_1) - m_2\ell_1\dot\theta_1^2\sin(\theta_1) + m_2\ell_2\ddot\theta_2\cos(\theta_2) - m_2\ell_2\dot\theta_2^2\cos(\theta_2) = 0
+            &(M + m_1 + m_2)\ddot x_c +  (m_1 + m_2)\ell_1\ddot\theta_1\cos(\theta_1)\\
+            &- (m_1 + m_2)\ell_1\dot\theta_1^2\sin(\theta_1) + m_2\ell_2\ddot\theta_2\cos(\theta_2) - m_2\ell_2\dot\theta_2^2\sin(\theta_2)  = 0      
         \end{aligned}
     \end{equation}   
 
-    With the differential equation solved for $\ddot \theta_1$:
+    With the differential equation solved for $\ddot x_c$:
     \begin{equation}
         \begin{aligned}
-            \frac{m_2\ell_1\ddot\theta_1\cos(\theta_1) - m_2\ell_1\dot\theta_1^2\sin(\theta_1) + m_2\ell_2\ddot\theta_2\cos(\theta_2) - m_2\ell_2\dot\theta_2^2\cos(\theta_2)}{-M+m_1} = \ddot x_c
+            \frac{(m_1 + m_2)\ell_1\ddot\theta_1\cos(\theta_1) - (m_1 + m_2)\ell_1\dot\theta_1^2\sin(\theta_1) + m_2\ell_2\ddot\theta_2\cos(\theta_2) - m_2\ell_2\dot\theta_2^2\sin(\theta_2)}{-M+m_1+m_2} = \ddot x_c
         \end{aligned}
     \end{equation}  
 
@@ -273,30 +274,33 @@
 
     \begin{equation}
         \begin{aligned}
-            &(M+m_1)\ddot x_c + m_2\ell_1\ddot\theta_1 - m_2\ell_2\ddot\theta_2\    = F
+            &(M+m_1+m_2)\ddot x_c + (m_1+m_2)\ell_1\ddot\theta_1 + m_2\ell_2\ddot\theta_2\    = F
         \end{aligned}   
     \end{equation}
 
     \begin{equation}
         \begin{aligned}
-            \ell_2\ddot \theta_2 + \ell_1  \ddot \theta_1 -  \ddot x_c +g\theta_2 = 0\\
+            (m_1 + m_2)\ell_1\ddot \theta_1 + m_2\ell_2\ddot\theta_2
+            +   (m_1 +m_2)\ddot x_c - (m_1 + m_2)g\theta_1 = 0 
+        \end{aligned}   
+    \end{equation}
+
+    \begin{equation}
+        \begin{aligned}
+            m_2\ell_2\ddot \theta_2 + m_2\ell_1  \ddot \theta_1 +  m_2\ddot x_c -m_2g\theta_2 = 0\\
         \end{aligned}   
     \end{equation}
     
-    \begin{equation}
-        \begin{aligned}
-            (m_1 + m_2)\ell_1\ddot \theta_1 + m_2\ell_2\ddot\theta_2
-            +   m_2\ddot x_c + (m_1 + m_2)g\theta_1 = 0 
-        \end{aligned}   
-    \end{equation}
+
+
 
 
     Or in matrix form:
     \begin{equation}
         \begin{bmatrix}
-            (M+m_1) & m_2\ell_1         & -m_2\ell_2\\
-            -1      & \ell_2            &  \ell_2\\
-            m_2     & (m_1+m_2)\ell_1   & m_2\ell_2
+            (M+m_1+m_2) & (m_1+m_2)\ell_1         & m_2\ell_2\\
+            (m_1 +m_2)     & (m_1+m_2)\ell_1   & m_2\ell_2\\
+            m_2      & m_2\ell_1            &  m_2\ell_2
         \end{bmatrix}
         \begin{bmatrix}
             \ddot x_c\\
@@ -306,8 +310,8 @@
         +
         \begin{bmatrix}
             0&0&0\\
-            0&0&0\\
-            0&(m_1 +m_2)g& g
+            0&-(m_1 +m_2)g&0\\
+            0&0&-g
         \end{bmatrix}
         \begin{bmatrix}
             x_c\\
@@ -353,9 +357,9 @@
             1&0&0&0&0&0\\
             0&1&0&0&0&0\\
             0&0&1&0&0&0\\
-            0&0&0&(M+m_1) & m_2\ell_1         & -m_2\ell_2\\
-            0&0&0&-1      & \ell_2            &  \ell_2\\
-            0&0&0&m_2     & (m_1+m_2)\ell_1   & m_2\ell_2
+            0&0&0&(M+m_2+m_1) & (m_1+m_2)\ell_1         & m_2\ell_2\\
+            0&0&0&(m_1 + m_2)      & (m_1+m_2)\ell_1            &  m_2\ell_2\\
+            0&0&0&m2     & m_2\ell_1   & m_2\ell_2
         \end{bmatrix}
         ,N =
         \begin{bmatrix}
@@ -363,8 +367,8 @@
             0&0&0&0&1&0\\
             0&0&0&0&0&1\\
             0&0&0&0&0&0\\
-            0&0&0&0&0&0\\
-            0&(m_1 +m_2)g& g &0&0&0
+            0&(m_1 +m_2)g&0&0&0&0\\
+            0&0& g &0&0&0
         \end{bmatrix}
         ,F=
         \begin{bmatrix}
@@ -385,30 +389,26 @@
 
 
     \begin{equation*}
-        \resizebox{\textwidth}{!}{$
         A = 
         \begin{bmatrix}
             0 & 0 & 0 & 1 & 0 & 0 \\
             0 & 0 & 0 & 0 & 1 & 0 \\
             0 & 0 & 0 & 0 & 0 & 1 \\
-            0 & \frac{g(m_1 + m_2)(-l_1m_2 - l_2m_2)}{Ml_1m_1 + Ml_1m_2 - Ml_2m_2 + l_1m_1^2 - 3l_1m_2^2 - l_2m_1m_2 - l_2m_2^2} & \frac{g(-l_1m_2 - l_2m_2)}{Ml_1m_1 + Ml_1m_2 - Ml_2m_2 + l_1m_1^2 - 3l_1m_2^2 - l_2m_1m_2 - l_2m_2^2} & 0 & 0 & 0 \\
-            0 & \frac{g(m_1 + m_2)(M + m_1 - m_2)}{Ml_1m_1 + Ml_1m_2 - Ml_2m_2 + l_1m_1^2 - 3l_1m_2^2 - l_2m_1m_2 - l_2m_2^2} & \frac{g(M + m_1 - m_2)}{Ml_1m_1 + Ml_1m_2 - Ml_2m_2 + l_1m_1^2 - 3l_1m_2^2 - l_2m_1m_2 - l_2m_2^2} & 0 & 0 & 0 \\
-            0 & \frac{g(m_1 + m_2)(-Ml_2 - l_1m_2 - l_2m_1)}{Ml_1l_2m_1 + Ml_1l_2m_2 - Ml_2^2m_2 + l_1l_2m_1^2 - 3l_1l_2m_2^2 - l_2^2m_1m_2 - l_2^2m_2^2} & \frac{g(-Ml_2 - l_1m_2 - l_2m_1)}{Ml_1l_2m_1 + Ml_1l_2m_2 - Ml_2^2m_2 + l_1l_2m_1^2 - 3l_1l_2m_2^2 - l_2^2m_1m_2 - l_2^2m_2^2} & 0 & 0 & 0
-        \end{bmatrix}$}
-    \end{equation*}
-    
-    \begin{equation*}
-        B = 
+            0 & \frac{-g(m_1 + m_2)}{M} & 0 & 0 & 0 & 0 \\
+            0 & \frac{g(M + m_1)(m_1 + m_2)}{(Ml_1m_1)} & \frac{-g m_2}{(l_1 m_1)} & 0 & 0 & 0 \\
+            0 & \frac{-g(m_1 + m_2)}{(l_2 m_1)} & \frac{g(m_1 + m_2)}{(l_2 m_1)} & 0 & 0 & 0 \\
+        \end{bmatrix}
+        ,         B = 
         \begin{bmatrix}
             0 \\
             0 \\
             0 \\
-            \frac{l_1 m_1 + l_1 m_2 - l_2 m_2}{Ml_1m_1 + Ml_1m_2 - Ml_2m_2 + l_1m_1^2 - 3l_1m_2^2 - l_2m_1m_2 - l_2m_2^2} \\
-            -\frac{2m_2}{Ml_1m_1 + Ml_1m_2 - Ml_2m_2 + l_1m_1^2 - 3l_1m_2^2 - l_2m_1m_2 - l_2m_2^2} \\
-            \frac{l_1m_1 + l_1m_2 + l_2m_2}{Ml_1l_2m_1 + Ml_1l_2m_2 - Ml_2^2m_2 + l_1l_2m_1^2 - 3l_1l_2m_2^2 - l_2^2m_1m_2 - l_2^2m_2^2} \\
+            1/M \\
+            -1/Ml_1 \\
+            0 \\
         \end{bmatrix}
     \end{equation*}
-
+    
     \begin{equation*}
         C = 
         \begin{bmatrix}

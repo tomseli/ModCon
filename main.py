@@ -2,6 +2,7 @@
 import pygame
 import numpy as np
 import math
+import matplotlib.pyplot as plt
 
 # Modules
 from modules import drawline
@@ -47,15 +48,16 @@ disturb = 0
 
 # Time
 dt = 0
+dt_cart = 0
 
 # Properties
 pendulum.l1 = 0.4
-pendulum.m1 = 0.2
+pendulum.m1 = 0.1
 pendulum.cf = 0#pendulum.m1/20.1428571428571428571428571428571
 
 
 pendulum.l2  = 0.4
-pendulum.m2  = 0.2
+pendulum.m2  = 0.1
 pendulum.cf2 = 0#pendulum.m2/20.1428571428571428571428571428571
 cart.m = 1
 pendulum.M = cart.m
@@ -80,6 +82,13 @@ control.init()
 rect_w = 50
 rect_h = 25
 
+
+cartAccarray = []
+time = []
+timerVar = 0
+teller = 0
+recordFlag = False
+
 running = True
 while running:
     ## Inputs ##
@@ -88,9 +97,11 @@ while running:
             running = False
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
-                disturb = -200
+                disturb = -500
+                recordFlag = True
             if event.key == pygame.K_RIGHT:
-                disturb = 200
+                disturb = 500
+                recordFlag = True
             if event.key == pygame.K_DOWN:
                 enable_control = False
     
@@ -102,21 +113,39 @@ while running:
 #             running = False
 # =============================================================================
         f = control.control()
-        if(f>40):
-            f=40
-        elif(f<-40):
-            f=-40 
+        if(f>1000):
+            f=1000
+        elif(f<-1000):
+            f=-1000
         f += disturb       
-        print(f, disturb, f-disturb)
+        # print(f, disturb, f-disturb)
+        
     else:
         f = 0 + disturb
-    disturb = 0    
 
     cart.f = f
     theta1, theta2, x = pendulum.step(dt)
     if((theta1 > math.pi/2) or (theta1 < -math.pi/2)):
         enable_control = False
     f = 0
+
+    if(recordFlag == True):
+        if(timerVar < 1):
+            # cartAccarray.append(cart.x_d) 
+            # time.append(timerVar)
+            timerVar += dt
+        # if(timerVar > 1):
+            # plt.plot(time, cartAccarray, label='Cart Acceleration')
+            # plt.xlabel('Time')
+            # plt.ylabel('Cart Acceleration')
+            # plt.title('Time vs Cart Acceleration')
+            # plt.legend()
+            # plt.show()
+            # break
+        if(timerVar > 0.05):
+            disturb = 0
+            timeVar = 0
+
 
     ## Rendering ## 
     # Background

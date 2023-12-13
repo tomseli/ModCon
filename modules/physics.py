@@ -39,9 +39,9 @@ class PhysicsCart(PhysicsBase):
         term4 = -self.pendulum.m2 * self.pendulum.l2 * self.pendulum.theta2_d**2 * math.sin(self.pendulum.theta2)
         
         self.x_dd = (term1 + term2 + term3 + term4) / -(self.pendulum.m1 + self.pendulum.m2 + self.m) \
-            + self.f - self.x_d * self.cf
-        self.x_d = self.x_d + self.x_dd * dt
-        self.x = self.x + self.x_d * dt * 20
+           + (self.f/ (self.pendulum.m1 + self.pendulum.m2 + self.m)) - self.x_d * self.cf
+        self.x_d = self.x_d + self.x_dd * dt * 20
+        self.x = self.x + self.x_d * dt
 
         if(self.x > self.x_max or self.x < self.x_min):
             self.x_dd = 0
@@ -111,8 +111,8 @@ class PhysicsDoublePendulum:
         self.l1 = 0
         self.l2 = 0
         self.g = 9.81
-        self.theta1 = 0
-        self.theta2 = 0 + math.pi/16
+        self.theta1 = 0+math.pi/16
+        self.theta2 = 0 
         self.theta1_d = 0
         self.theta2_d = 0
 
