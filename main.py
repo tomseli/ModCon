@@ -52,12 +52,12 @@ dt_cart = 0
 
 # Properties
 pendulum.l1 = 0.4
-pendulum.m1 = 0.1
+pendulum.m1 = 1
 pendulum.cf = 0#pendulum.m1/20.1428571428571428571428571428571
 
 
 pendulum.l2  = 0.4
-pendulum.m2  = 0.1
+pendulum.m2  = 1
 pendulum.cf2 = 0#pendulum.m2/20.1428571428571428571428571428571
 cart.m = 1
 pendulum.M = cart.m
@@ -97,14 +97,16 @@ while running:
             running = False
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
-                disturb = -500
+                disturb = -400
                 recordFlag = True
             if event.key == pygame.K_RIGHT:
-                disturb = 500
+                disturb = 400
                 recordFlag = True
             if event.key == pygame.K_DOWN:
                 enable_control = False
     
+    # print("sim          ", pendulum.cart.x, pendulum.theta1, pendulum.theta2, pendulum.cart.x_d, pendulum.theta1_d, pendulum.theta2_d)
+
     ## Simulation ##
     # Controller
     if(enable_control):
@@ -113,10 +115,10 @@ while running:
 #             running = False
 # =============================================================================
         f = control.control()
-        if(f>1000):
-            f=1000
-        elif(f<-1000):
-            f=-1000
+        if(f>500):
+            f=500
+        elif(f<-500):
+            f=-500
         f += disturb       
         # print(f, disturb, f-disturb)
         
@@ -131,17 +133,17 @@ while running:
 
     if(recordFlag == True):
         if(timerVar < 1):
-            # cartAccarray.append(cart.x_d) 
-            # time.append(timerVar)
+            cartAccarray.append(pendulum.theta1) 
+            time.append(timerVar)
             timerVar += dt
-        # if(timerVar > 1):
-            # plt.plot(time, cartAccarray, label='Cart Acceleration')
-            # plt.xlabel('Time')
-            # plt.ylabel('Cart Acceleration')
-            # plt.title('Time vs Cart Acceleration')
-            # plt.legend()
-            # plt.show()
-            # break
+        if(timerVar > 1):
+            plt.plot(time, cartAccarray, label='theta1')
+            plt.xlabel('Time')
+            plt.ylabel('Cart Acceleration')
+            plt.title('Time vs Cart Acceleration')
+            plt.legend()
+            plt.show()
+            break
         if(timerVar > 0.05):
             disturb = 0
             timeVar = 0
@@ -183,6 +185,6 @@ while running:
     pygame.display.flip()
 
     # Time keeping
-    dt = clock.tick(480)/5000
+    dt = clock.tick(480)/8000
 
 pygame.quit()

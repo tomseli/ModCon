@@ -141,6 +141,8 @@ class ControlLQR():
         l2 = self.l2
         g = self.g
 
+        print(m1, m2, M, l1, l2, g)
+
         num1 = \
         + M*l1*m1 
         + M*l2*m2 
@@ -179,31 +181,34 @@ class ControlLQR():
 
 
         self.R = np.array(
-            [[0.05]]
+            [[0.08]]
         )
         
         i = 1
         self.Q = np.array(
-            [[i*60, 0, 0, 0, 0, 0],
+            [[i*40, 0, 0, 0, 0, 0],
              [0, i*1, 0, 0, 0, 0],
              [0, 0, i*1, 0, 0, 0],
-             [0, 0, 0, i*15, 0, 0],
+             [0, 0, 0, i*1, 0, 0],
              [0, 0, 0, 0, i*1, 0],
              [0, 0, 0, 0, 0, i]]
         )
+
+        # self.Q = np.eye(6)
 
         self.P = solve_continuous_are(self.A, self.B, self.Q, self.R)
         self.K = np.linalg.inv(self.R)@(self.B.T@self.P)
         return
     
     def control(self) -> float:
-        x1 = self.pendulum.x
+        x1 = self.pendulum.cart.x
         x2 = self.pendulum.theta1
         x3 = self.pendulum.theta2
-        x4 = self.pendulum.xc_d
+        x4 = self.pendulum.cart.x_d
         x5 = self.pendulum.theta1_d
         x6 = self.pendulum.theta2_d
 
+        # print("controller = ", x1, x2, x3, x4, x5 ,x6)
         X = np.array(
             [[x1],
              [x2],
